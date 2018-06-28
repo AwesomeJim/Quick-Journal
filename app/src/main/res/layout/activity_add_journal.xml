@@ -15,7 +15,7 @@
         >
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/EditText_title"
+            android:id="@+id/EditText_title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -30,6 +30,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
             >
             <android.support.design.widget.TextInputEditText
+                android:id="@+id/editText_journal_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusableInTouchMode="true"
@@ -85,7 +86,7 @@
             />
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/editText"
+            android:id="@+id/editText_body_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="16dp"
@@ -98,7 +99,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/EditText_title"
+            app:layout_constraintTop_toBottomOf="@+id/EditText_title_layout"
             app:layout_constraintVertical_bias="1.0"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
             >

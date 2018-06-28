@@ -6,4 +6,5 @@
   <string name="btn_save">Save</string>
   <string name="hint_title">Title</string>
   <string name="activity_add_journal_title">Add a Journal</string>
+    <string name="update_button">Update</string>
 </resources>

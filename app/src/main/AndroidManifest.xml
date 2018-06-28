@@ -22,7 +22,9 @@
         <activity
             android:name=".AddJournalActivity"
             android:parentActivityName=".MainActivity"
-            android:label="@string/activity_add_journal_title"/>
+            android:label="@string/activity_add_journal_title"
+            android:logo="@drawable/ic_action_edit_journal"
+            />
     </application>
 
 </manifest>
