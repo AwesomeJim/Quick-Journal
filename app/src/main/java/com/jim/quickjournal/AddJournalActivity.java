@@ -55,16 +55,17 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
         if (savedInstanceState != null && savedInstanceState.containsKey(INSTANCE_JOURNAL_ID)) {
             mJournalId= savedInstanceState.getInt(INSTANCE_JOURNAL_ID, DEFAULT_JOURNAL_ID);
         }
+
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(EXTRA_JOURNAL_ID)) {
             btn_Save.setText(R.string.update_button);
             if (mJournalId == DEFAULT_JOURNAL_ID) {
-                // populate the UI
+                mJournalId = intent.getIntExtra(EXTRA_JOURNAL_ID, DEFAULT_JOURNAL_ID);
+                JournalEntry journalEntry = mDb.journalDao().loadJournalById(mJournalId);
+                populateUI(journalEntry);
             }
         }
-
     }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(INSTANCE_JOURNAL_ID, mJournalId);
@@ -109,7 +110,18 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
         String body=mJournalBodyEditText.getText().toString();
         Date date = new Date();
         JournalEntry journalEntry = new JournalEntry(title, body, date);
-        mDb.journalDao().insertJournal(journalEntry);
+
+        // insert the task only if mJournalId matches DEFAULT_JOURNAL_ID
+        // Otherwise update it
+        // call finish in any case
+        if (mJournalId == DEFAULT_JOURNAL_ID) {
+            // insert new task
+            mDb.journalDao().insertJournal(journalEntry);
+        } else {
+            //update task
+            journalEntry.setId(mJournalId);
+            mDb.journalDao().updateJournal(journalEntry);
+        }
         finish();
     }
 
@@ -120,6 +132,8 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
      * @param journalEntry the Journal Entry to populate the UI
      */
     private void populateUI(JournalEntry journalEntry) {
+        mJournalTitleEditText.setText(journalEntry.getTitle());
+        mJournalBodyEditText.setText(journalEntry.getBody());
 
     }
 }

@@ -1,18 +1,22 @@
 package com.jim.quickjournal;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.jim.quickjournal.data.JournalAdapter;
+import com.jim.quickjournal.data.JournalEntry;
 import com.jim.quickjournal.data.database.JournalDatabase;
 
 public class MainActivity extends AppCompatActivity implements JournalAdapter.ItemClickListener {
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements JournalAdapter.It
         mAdapter = new JournalAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
 
+        //Floating Action Button for adding a Journal entry
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +102,27 @@ public class MainActivity extends AppCompatActivity implements JournalAdapter.It
     }
 
     @Override
-    public void onItemClickListener(int itemId) {
-        // Launch AddTaskActivity adding the itemId as an extra in the intent
+    public void onItemClickListener(final int itemId) {
+        final JournalEntry entry=mDb.journalDao().loadJournalById(itemId);
+        new AlertDialog.Builder(this)
+                .setTitle(entry.getTitle())
+                .setMessage(entry.getBody())
+                .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(MainActivity.this, AddJournalActivity.class);
+                        intent.putExtra(AddJournalActivity.EXTRA_JOURNAL_ID, itemId);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mDb.journalDao().deleteJournal(entry);
+                    }
+                })
+                .setIcon(R.drawable.ic_journal_entry)
+                .setNeutralButton("ok", null)
+                .show();
     }
 }

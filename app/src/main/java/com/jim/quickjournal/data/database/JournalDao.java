@@ -26,4 +26,7 @@ public interface JournalDao {
 
     @Delete
     void deleteJournal(JournalEntry journalEntry);
+
+    @Query("SELECT * FROM journals WHERE id = :id")
+    JournalEntry loadJournalById(int id);
 }

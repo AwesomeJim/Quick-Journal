@@ -126,5 +126,7 @@ class JournalViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
         int elementId = mJournalEntries.get(getAdapterPosition()).getId();
         mItemClickListener.onItemClickListener(elementId);
     }
+
 }
+
 }
