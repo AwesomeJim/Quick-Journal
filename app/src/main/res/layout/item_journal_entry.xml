@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_journal"
-    android:clickable="true"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="110dp"
     android:layout_margin="5dp"
+    android:clickable="true"
     app:cardCornerRadius="4dp"
-    app:cardElevation="3dp"
-    >
+    app:cardElevation="3dp">
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageView
             android:id="@+id/imageView_journal"
-            android:layout_width="72dp"
-            android:layout_height="70dp"
+            android:layout_width="59dp"
+            android:layout_height="64dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="16dp"
             android:scaleType="centerCrop"
-            tools:ignore="ContentDescription"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_journal_entry" />
+            app:srcCompat="@drawable/ic_journal_entry"
+            tools:ignore="ContentDescription" />
 
         <ImageView
             android:id="@+id/imageView_btn_more"
@@ -50,30 +50,30 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            tools:text="Journal Date"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Journal Date" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="100dp" />
+            app:layout_constraintGuide_begin="90dp" />
 
         <TextView
             android:id="@+id/textView_journal_body"
             android:layout_width="0dp"
-            android:layout_height="66dp"
+            android:layout_height="32dp"
             android:layout_marginEnd="16dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="16dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            tools:text="Journal body body body"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/textView_journal_title" />
+            app:layout_constraintTop_toBottomOf="@+id/textView_journal_title"
+            tools:text="Journal body body body" />
 
         <TextView
             android:id="@+id/textView_journal_date"
@@ -82,8 +82,8 @@
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            tools:text="28th June 2018"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline" />
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            tools:text="28th June 2018" />
     </android.support.constraint.ConstraintLayout>
 </android.support.design.card.MaterialCardView>
