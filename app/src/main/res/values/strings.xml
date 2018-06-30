@@ -32,4 +32,13 @@
     <string name="no_internet_connection">No internet connection</string>
     completions."
   </string>
+  <string name="edit">Edit</string>
+  <string name="myjournal">My Journal</string>
+  <string name="update">Update</string>
+  <string name="delete">Delete</string>
+  <string name="last_updated_on">Last Updated on</string>
+  <string name="profile">Profile</string>
+  <string name="help">Help</string>
+  <string name="logout">Logout</string>
+  <string name="info">Info</string>
 </resources>

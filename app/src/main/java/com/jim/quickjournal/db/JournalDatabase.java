@@ -1,4 +1,4 @@
-package com.jim.quickjournal.data.database;
+package com.jim.quickjournal.db;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -7,8 +7,9 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.util.Log;
 
-import com.jim.quickjournal.data.DateConverter;
-import com.jim.quickjournal.data.JournalEntry;
+import com.jim.quickjournal.db.converter.DateConverter;
+import com.jim.quickjournal.db.dao.JournalDao;
+import com.jim.quickjournal.db.entity.JournalEntry;
 
 @Database(entities = {JournalEntry.class}, version = 1, exportSchema = false)
 @TypeConverters(DateConverter.class)
@@ -25,8 +26,6 @@ public abstract class JournalDatabase extends RoomDatabase {
                 Log.d(LOG_TAG, "Creating new database instance");
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         JournalDatabase.class, JournalDatabase.DATABASE_NAME)
-                        // COMPLETED (2) call allowMainThreadQueries before building the instance
-                        // Queries should be done in a separate thread to avoid locking the UI
                         // We will allow this ONLY TEMPORALLY to see that our DB is working
                         .allowMainThreadQueries()
                         .build();

@@ -1,0 +1,134 @@
+package com.jim.quickjournal.ui;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.design.button.MaterialButton;
+import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import com.jim.quickjournal.R;
+import com.jim.quickjournal.db.JournalDatabase;
+import com.jim.quickjournal.db.entity.JournalEntry;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+public class JournalDetailActivity extends AppCompatActivity implements View.OnClickListener {
+
+  // Extra for the task ID to be received in the intent
+  public static final String EXTRA_JOURNAL_ID = "extraJournalId";
+
+  // Constant for date format
+  private static final String DATE_FORMAT = "EEE, d MMM yyyy HH:mm aa";
+
+  // Date formatter
+  private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+
+  TextInputEditText mJournalTitleEditText;
+  TextInputEditText mJournalBodyEditText;
+  TextView mDateView;
+  MaterialButton btn_delete;
+  MaterialButton btn_update;
+  JournalEntry journalEntry;
+  JournalDatabase mDb;
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_journal_detail);
+     mDb = JournalDatabase.getInstance(getApplicationContext());
+    initViews();
+    Intent intent = getIntent();
+    if (intent != null && intent.hasExtra(EXTRA_JOURNAL_ID)) {
+       int mJournalId = intent.getIntExtra(EXTRA_JOURNAL_ID,-1);
+         journalEntry = mDb.journalDao().loadJournalById(mJournalId);
+        populateUI(journalEntry);
+
+    }
+  }
+
+  private void initViews()
+  {
+    mJournalTitleEditText=findViewById(R.id.editText_journal_title);
+    mJournalBodyEditText=findViewById(R.id.editText_journal_body);
+    mDateView=findViewById(R.id.textView_date);
+    btn_delete=findViewById(R.id.button_delete);
+    btn_update=findViewById(R.id.button_update);
+    btn_update.setOnClickListener(this);
+    btn_delete.setOnClickListener(this);
+  }
+
+
+  /**
+   * populateUI would be called to populate the UI when in view mode
+   *
+   * @param journalEntry the Journal Entry to populate the UI
+   */
+  private void populateUI(JournalEntry journalEntry) {
+    mJournalTitleEditText.setText(journalEntry.getTitle());
+    mJournalBodyEditText.setText(journalEntry.getBody());
+    mDateView.setText(dateFormat.format(journalEntry.getUpdatedOn()));
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.menu_journal_detail_activity, menu);
+    return true;
+  }
+
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    // Handle action bar item clicks here. The action bar will
+    // automatically handle clicks on the Home/Up button, so long
+    // as you specify a parent activity in AndroidManifest.xml.
+    int id = item.getItemId();
+    switch (id){
+      case R.id.bar_edit_property:
+       upDateJournal();
+        break;
+     default:
+       break;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public void onClick(View view) {
+    int id =view.getId();
+    switch (id){
+      case R.id.button_delete:
+       deleteJournal();
+        break;
+      case R.id.button_update:
+        upDateJournal();
+        break;
+    }
+
+  }
+
+  public void upDateJournal(){
+    Intent intent = new Intent(JournalDetailActivity.this, AddJournalActivity.class);
+    intent.putExtra(AddJournalActivity.EXTRA_JOURNAL_ID, journalEntry.getId());
+    startActivity(intent);
+  }
+  public void deleteJournal(){
+    new AlertDialog.Builder(this)
+        .setTitle("Confirm Deletion!")
+        .setMessage("are you sure you want to delete this journal?")
+        .setPositiveButton("No Cancel", null)
+        .setNegativeButton("yes Delete", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            mDb.journalDao().deleteJournal(journalEntry);
+          }
+        })
+        .setIcon(R.drawable.ic_journal_entry)
+        .show();
+  }
+}

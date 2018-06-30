@@ -1,18 +1,18 @@
-package com.jim.quickjournal;
+package com.jim.quickjournal.ui;
 
 import android.content.Intent;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.jim.quickjournal.data.JournalAdapter;
-import com.jim.quickjournal.data.JournalEntry;
-import com.jim.quickjournal.data.database.JournalDatabase;
-
+import com.jim.quickjournal.R;
+import com.jim.quickjournal.db.JournalDatabase;
+import com.jim.quickjournal.db.entity.JournalEntry;
 import java.util.Date;
 
 public class AddJournalActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,7 +28,7 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
     private static final int DEFAULT_JOURNAL_ID = -1;
 
     //Constant for logging
-    private static final String TAG = AddJournalActivity.class.getSimpleName();
+   // private static final String TAG = AddJournalActivity.class.getSimpleName();
 
     // Fields for views
    TextInputEditText mJournalTitleEditText;
@@ -72,6 +72,29 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
         super.onSaveInstanceState(outState);
     }
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.menu_activity_addjournal, menu);
+    return true;
+  }
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    // Handle action bar item clicks here. The action bar will
+    // automatically handle clicks on the Home/Up button, so long
+    // as you specify a parent activity in AndroidManifest.xml.
+    int id = item.getItemId();
+    switch (id){
+      case R.id.bar_cancel_btn:
+        finish();
+        break;
+      case R.id.bar_save_btn:
+        onSaveButtonClicked();
+        break;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
     /**
      * initViews is called from onCreate to init the member variable views
      */
@@ -100,12 +123,12 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
 
         }
     }
-
     /**
      * onSaveButtonClicked is called when the "save" button is clicked.
      * It retrieves user input and inserts that new Journal Entry data into the underlying database.
      */
     public void onSaveButtonClicked() {
+
         String title= mJournalTitleEditText.getText().toString();
         String body=mJournalBodyEditText.getText().toString();
         Date date = new Date();

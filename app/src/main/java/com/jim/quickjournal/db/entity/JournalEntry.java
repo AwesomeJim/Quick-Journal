@@ -1,4 +1,4 @@
-package com.jim.quickjournal.data;
+package com.jim.quickjournal.db.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;

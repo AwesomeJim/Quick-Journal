@@ -1,4 +1,4 @@
-package com.jim.quickjournal.data;
+package com.jim.quickjournal.ui;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.jim.quickjournal.R;
 
+
+import com.jim.quickjournal.db.entity.JournalEntry;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -17,7 +19,7 @@ import java.util.Locale;
 public class JournalAdapter extends RecyclerView.Adapter<JournalAdapter.JournalViewHolder> {
 
 // Constant for date format
-private static final String DATE_FORMAT = "dd/MM/yyy";
+private static final String DATE_FORMAT = "EEE, d MMM yyyy HH:mm aa";
 
 // Member variable to handle item clicks
 final private ItemClickListener mItemClickListener;
@@ -35,7 +37,7 @@ private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.g
  * @param context  the current Context
  * @param listener the ItemClickListener
  */
-public JournalAdapter(Context context, ItemClickListener listener) {
+JournalAdapter(Context context, ItemClickListener listener) {
         mContext = context;
         mItemClickListener = listener;
         }

@@ -7,19 +7,19 @@
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_action_account_circle"
-            android:title="Profile" />
+            android:title="@string/profile" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/info">
         <menu>
             <item
                 android:id="@+id/nav_help"
                 android:icon="@drawable/ic_action_help"
-                android:title="Help" />
+                android:title="@string/help" />
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_logout"
-                android:title="Logout" />
+                android:title="@string/logout" />
         </menu>
     </item>
 

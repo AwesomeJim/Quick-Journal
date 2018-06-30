@@ -15,21 +15,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".AddJournalActivity"
+            android:name=".ui.AddJournalActivity"
             android:label="@string/activity_add_journal_title"
             android:logo="@drawable/ic_action_edit_journal"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".LoginActivity">
+            android:parentActivityName=".ui.MainActivity"/>
+        <activity android:name=".ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.JournalDetailActivity"
+            android:label="@string/myjournal"
+            android:parentActivityName=".ui.MainActivity">
         </activity>
     </application>
 

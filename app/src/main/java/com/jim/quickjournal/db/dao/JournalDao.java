@@ -1,4 +1,4 @@
-package com.jim.quickjournal.data.database;
+package com.jim.quickjournal.db.dao;
 
 
 import android.arch.persistence.room.Dao;
@@ -8,8 +8,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.jim.quickjournal.data.JournalEntry;
-
+import com.jim.quickjournal.db.entity.JournalEntry;
 import java.util.List;
 
 @Dao

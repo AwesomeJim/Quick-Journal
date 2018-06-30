@@ -41,7 +41,7 @@ dependencies {
   implementation 'com.firebaseui:firebase-ui-firestore:4.1.0' //FirebaseUI for Cloud Firestore
   implementation 'com.firebaseui:firebase-ui-auth:4.1.0' //FirebaseUI for Firebase Auth
 
-  implementation 'com.squareup.picasso:picasso:2.71828'//Load photos
+  implementation 'com.squareup.picasso:picasso:2.71828' //Load photos
 
   testImplementation 'junit:junit:4.12'
   androidTestImplementation 'com.android.support.test:runner:1.0.2'

@@ -1,4 +1,4 @@
-package com.jim.quickjournal.data;
+package com.jim.quickjournal.db.converter;
 
 import android.arch.persistence.room.TypeConverter;
 

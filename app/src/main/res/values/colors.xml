@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008D44</color>
-    <color name="colorPrimaryDark">#005E1A</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--App Global theme Colors-->
+    <color name="colorPrimary">#33BBD5</color>
+    <color name="colorPrimaryDark">#299CB3</color>
+    <color name="colorAccent">#0078D7</color>
+    <color name="white">#FFFFFF</color>
+
+    <!--Layout Background-->
+    <color name="Layout_background">#F3FDFF</color>
+
+    <!-- other colors-->
+    <color name="overlay_dark_20">#33000000</color>
+    <color name="overlay_dark_30">#4D000000</color>
 </resources>
