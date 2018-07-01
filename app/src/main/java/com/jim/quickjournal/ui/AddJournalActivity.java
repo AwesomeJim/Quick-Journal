@@ -1,6 +1,25 @@
+/*
+ * Copyright 2018 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.jim.quickjournal.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.button.MaterialButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -10,11 +29,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.jim.quickjournal.AppExecutors;
 import com.jim.quickjournal.R;
 import com.jim.quickjournal.db.JournalDatabase;
 import com.jim.quickjournal.db.entity.JournalEntry;
+import com.jim.quickjournal.viewmodel.JournalViewModel;
+import com.jim.quickjournal.viewmodel.JournalViewModelFactory;
 import java.util.Date;
 
+/**
+ * Allows user to make a new Journal Entry
+ *
+ */
 public class AddJournalActivity extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -27,8 +53,6 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
     //Constant for default task id to be used when not in update mode
     private static final int DEFAULT_JOURNAL_ID = -1;
 
-    //Constant for logging
-   // private static final String TAG = AddJournalActivity.class.getSimpleName();
 
     // Fields for views
    TextInputEditText mJournalTitleEditText;
@@ -51,7 +75,6 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
 
         // Initialize member variable for the data base
         mDb = JournalDatabase.getInstance(getApplicationContext());
-
         if (savedInstanceState != null && savedInstanceState.containsKey(INSTANCE_JOURNAL_ID)) {
             mJournalId= savedInstanceState.getInt(INSTANCE_JOURNAL_ID, DEFAULT_JOURNAL_ID);
         }
@@ -61,8 +84,19 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
             btn_Save.setText(R.string.update_button);
             if (mJournalId == DEFAULT_JOURNAL_ID) {
                 mJournalId = intent.getIntExtra(EXTRA_JOURNAL_ID, DEFAULT_JOURNAL_ID);
-                JournalEntry journalEntry = mDb.journalDao().loadJournalById(mJournalId);
-                populateUI(journalEntry);
+              /**
+               *Load the Journal entry form the ViewModel
+               */
+              JournalViewModelFactory modelFactory=new JournalViewModelFactory(mDb,mJournalId);
+              final JournalViewModel
+                  viewModel= ViewModelProviders.of(this,modelFactory).get(JournalViewModel.class);
+                viewModel.getJournalEntryLiveData().observe(this, new Observer<JournalEntry>() {
+                  @Override public void onChanged(@Nullable JournalEntry jEntry) {
+                 viewModel.getJournalEntryLiveData().removeObserver(this);
+                    populateUI(jEntry);
+                  }
+                });
+
             }
         }
     }
@@ -132,20 +166,26 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
         String title= mJournalTitleEditText.getText().toString();
         String body=mJournalBodyEditText.getText().toString();
         Date date = new Date();
-        JournalEntry journalEntry = new JournalEntry(title, body, date);
+      final JournalEntry journalEntry = new JournalEntry(title, body, date);
 
-        // insert the task only if mJournalId matches DEFAULT_JOURNAL_ID
-        // Otherwise update it
-        // call finish in any case
-        if (mJournalId == DEFAULT_JOURNAL_ID) {
+      AppExecutors.getInstance().diskIO().execute(new Runnable() {
+        @Override
+        public void run() {
+          // insert the task only if mJournalId matches DEFAULT_JOURNAL_ID
+          // Otherwise update it
+          // call finish in any case
+          if (mJournalId == DEFAULT_JOURNAL_ID) {
             // insert new task
             mDb.journalDao().insertJournal(journalEntry);
-        } else {
+          } else {
             //update task
             journalEntry.setId(mJournalId);
             mDb.journalDao().updateJournal(journalEntry);
+          }
+          finish();
         }
-        finish();
+      });
+
     }
 
 

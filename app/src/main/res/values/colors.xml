@@ -9,7 +9,5 @@
     <!--Layout Background-->
     <color name="Layout_background">#F3FDFF</color>
 
-    <!-- other colors-->
-    <color name="overlay_dark_20">#33000000</color>
     <color name="overlay_dark_30">#4D000000</color>
 </resources>

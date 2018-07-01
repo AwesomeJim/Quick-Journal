@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.JournalDetailActivity"
-            android:label="@string/myjournal"
+            android:label="@string/myJournal"
             android:parentActivityName=".ui.MainActivity">
         </activity>
     </application>

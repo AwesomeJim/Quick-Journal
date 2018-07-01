@@ -1,25 +1,45 @@
+/*
+ * Copyright 2018 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.jim.quickjournal.ui;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.jim.quickjournal.R;
-
-
 import com.jim.quickjournal.db.entity.JournalEntry;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
+/**
+ * Adapter Responsible for Displaying the Journals to the Application UI
+ */
 public class JournalAdapter extends RecyclerView.Adapter<JournalAdapter.JournalViewHolder> {
 
 // Constant for date format
-private static final String DATE_FORMAT = "EEE, d MMM yyyy HH:mm aa";
+private static final String DATE_FORMAT = "d MMM yyyy HH:mm aa";
+private static final String DATE_FORMAT_INIT = "EEE";
 
 // Member variable to handle item clicks
 final private ItemClickListener mItemClickListener;
@@ -30,6 +50,7 @@ private Context mContext;
 
 // Date formatter
 private SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+  private SimpleDateFormat dateFormatInit = new SimpleDateFormat(DATE_FORMAT_INIT, Locale.getDefault());
 
 /**
  * Constructor for the TaskAdapter that initializes the Context.
@@ -70,16 +91,20 @@ public void onBindViewHolder(@NonNull JournalViewHolder holder, int position) {
         String title=journalEntry.getTitle();
         String body= journalEntry.getBody();
         String updatedOn = dateFormat.format(journalEntry.getUpdatedOn());
+        GradientDrawable gradientDrawable=(GradientDrawable)holder.intial.getBackground();
+        gradientDrawable.setColor(getRandomColor());
         //Set values
         holder.JournalTitleView.setText(title);
         holder.JournalBodyView.setText(body);
         holder.JournalDateView.setText(updatedOn);
+        holder.intial.setText(dateFormatInit.format(journalEntry.getUpdatedOn()));
         }
 
-/**
- * Returns the number of items to display.
- */
-@Override
+  /**
+   *
+   * @return Returns the number of items to display.
+   */
+  @Override
 public int getItemCount() {
         if (mJournalEntries == null) {
         return 0;
@@ -87,11 +112,12 @@ public int getItemCount() {
         return mJournalEntries.size();
         }
 
-/**
- * When data changes, this method updates the list of journalEntries
- * and notifies the adapter to use the new values on it
- */
-public void setJournals(List<JournalEntry> journalEntries) {
+  /**
+   * @param journalEntries
+   * When data changes, this method updates the list of journalEntries
+   * and notifies the adapter to use the new values on it
+   */
+  public void setJournals(List<JournalEntry> journalEntries) {
         mJournalEntries =journalEntries;
         notifyDataSetChanged();
         }
@@ -100,6 +126,15 @@ public interface ItemClickListener {
     void onItemClickListener(int itemId);
 }
 
+  /**
+   *
+   * @return Ca random color which is used a background by
+   * day textview
+   */
+  private int getRandomColor(){
+    Random rnd = new Random();
+    return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+  }
 // Inner class for creating ViewHolders
 class JournalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -107,8 +142,10 @@ class JournalViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     TextView JournalTitleView;
     TextView JournalBodyView;
     TextView JournalDateView;
+    TextView intial;
 
-    /**
+
+  /**
      * Constructor for the TaskViewHolders.
      *
      * @param itemView The view inflated in onCreateViewHolder
@@ -119,6 +156,8 @@ class JournalViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
         JournalTitleView = itemView.findViewById(R.id.textView_journal_title);
         JournalBodyView= itemView.findViewById(R.id.textView_journal_body);
         JournalDateView = itemView.findViewById(R.id.textView_journal_date);
+        intial=itemView.findViewById(R.id.imageView_journal);
+
         itemView.setOnClickListener(this);
     }
 

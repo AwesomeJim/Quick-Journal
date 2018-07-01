@@ -1,9 +1,28 @@
+
+/*
+ * Copyright 2018 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.jim.quickjournal.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,7 +34,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,13 +43,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.jim.quickjournal.R;
 import com.jim.quickjournal.db.JournalDatabase;
+import com.jim.quickjournal.db.entity.JournalEntry;
+import com.jim.quickjournal.viewmodel.MainViewModel;
 import com.squareup.picasso.Picasso;
+import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements JournalAdapter.ItemClickListener,NavigationView.OnNavigationItemSelectedListener {
 
-    // Constant for logging
-   // private static final String TAG = MainActivity.class.getSimpleName();
 
+//Activity Member Variables
   private JournalAdapter  mAdapter;
     private JournalDatabase mDb;
     FirebaseAuth mAuth;
@@ -39,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements JournalAdapter.It
     Toolbar toolbar;
     String loginMode;
     String loginDetails;
-    ImageView photo;
+    CircleImageView photo;
     Uri photoUrl;
 
     @Override
@@ -48,22 +69,34 @@ public class MainActivity extends AppCompatActivity implements JournalAdapter.It
         setContentView(R.layout.activity_main);
          toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setHomeButtonEnabled(true);
+
+        //Initialize the AppDatabase
         mDb=JournalDatabase.getInstance(getApplicationContext());
+
+        //Initializes the Firebase instance
         mAuth=FirebaseAuth.getInstance();
+
+        //check if the user is login
         user=mAuth.getCurrentUser();
         if(user!=null){
+          //User is logged in get their details and initialize the views and Load Journals
             loadGoogleUserDetails();
             initViews();
+            setUpViewModel();
         }else {
+          //User Not Logged In
             Intent intent= new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }
-
-
-
     }
-public void loadGoogleUserDetails(){
+
+  /**
+   * Get the details of the Logged in User
+   */
+  public void loadGoogleUserDetails(){
+    /**
+     * Check which method/Provider a user Used to login
+     */
     for (UserInfo profile : user.getProviderData()) {
         switch (profile.getProviderId()) {
             case "google.com": {
@@ -122,7 +155,7 @@ public void loadGoogleUserDetails(){
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerLayout = navigationView.getHeaderView(0);
-        photo=headerLayout.findViewById(R.id.user_profile_image_view);
+        photo=headerLayout.findViewById(R.id.profile_image);
         TextView loginM=headerLayout.findViewById(R.id.login_method);
         loginM.setText(loginMode);
         TextView details=headerLayout.findViewById(R.id.user_details);
@@ -168,17 +201,13 @@ public void loadGoogleUserDetails(){
     }
 
 
-    /**
-            * This method is called after this activity has been paused or restarted.
-            * Often, this is after new data has been inserted through an AddJournalsActivity,
-            * so this re-queries the database data for any changes.
-            */
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Call the adapter's setTasks method using the result
-        // of the loadAllTasks method from the taskDao
-        mAdapter.setJournals(mDb.journalDao().loadAllJournals());
+    private void setUpViewModel(){
+      MainViewModel viewModel= ViewModelProviders.of(this).get(MainViewModel.class);
+     viewModel.getJournalEntryLiveData().observe(this, new Observer<List<JournalEntry>>() {
+        @Override public void onChanged(@Nullable List<JournalEntry> journalEntries) {
+          mAdapter.setJournals(journalEntries);
+        }
+      });
     }
 
     @Override

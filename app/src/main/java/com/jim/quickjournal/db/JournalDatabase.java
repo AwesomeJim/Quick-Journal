@@ -26,8 +26,6 @@ public abstract class JournalDatabase extends RoomDatabase {
                 Log.d(LOG_TAG, "Creating new database instance");
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         JournalDatabase.class, JournalDatabase.DATABASE_NAME)
-                        // We will allow this ONLY TEMPORALLY to see that our DB is working
-                        .allowMainThreadQueries()
                         .build();
             }
         }
