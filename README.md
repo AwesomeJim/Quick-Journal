@@ -1,5 +1,5 @@
 # Quick-Journal
-This repository is an adroid app which I did as project Implementation of #7DaysofCodeChallenge Google Africa Scholarship powered by [Andela](https://andela.com/alcwithgoogle/), [Google and Udacity](https://www.udacity.com/google-africa-scholarships)
+This repository is an android Journala application which I did as project Implementation of #7DaysofCodeChallenge Google Africa Scholarship powered by [Andela](https://andela.com/alcwithgoogle/), [Google and Udacity](https://www.udacity.com/google-africa-scholarships)
 
 Objective of the Project 
 ---------------
