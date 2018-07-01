@@ -2,4 +2,4 @@
 
 Screenshots
 ------------
-![Login page](screenshots/loginpage.png "Login page")
+![Login page](Screenshots/loginpage.png "Login page")
