@@ -1,4 +1,22 @@
 # Quick-Journal
+This repository is an adroid app which I did as project Implementation of #7DaysofCodeChallenge Google Africa Scholarship powered by [Andela](https://andela.com/alcwithgoogle/), [Google and Udacity](https://www.udacity.com/google-africa-scholarships)
+
+Objective of the Project 
+---------------
+The aim of the project was mainly to test the ability to implement what we learnt in the Google Africa Scholarship challenge course. The course was amazing especially with the introduction of [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/) like :
+- [Room](https://developer.android.com/topic/libraries/architecture/room)
+- [LiveData](https://developer.android.com/topic/libraries/architecture/livedata), 
+- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel), just to mention a few. 
+
+Application Functions:
+--------------
+This app enable users to:
+- Register and Login using google authentication.
+- View all entries to their diary.
+- View the contents of a diary entry.
+- Add and modify an entry.
+
+
 
 # Quick-Journal
 This repository is an adroid app which I did as project Implementation of #7DaysofCodeChallenge Google Africa Scholarship powered by [Andela](https://andela.com/alcwithgoogle/), [Google and Udacity](https://www.udacity.com/google-africa-scholarships)
