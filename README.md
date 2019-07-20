@@ -1,6 +1,6 @@
 # Quick-Journal
 This repository is an android Journala application which I did as project Implementation of #7DaysofCodeChallenge Google Africa Scholarship powered by [Andela](https://andela.com/alcwithgoogle/), [Google and Udacity](https://www.udacity.com/google-africa-scholarships)
-
+---Migrated to androidX
 Objective of the Project 
 ---------------
 The aim of the project was mainly to test the ability to implement what we learnt in the Google Africa Scholarship challenge course. The course was amazing especially with the introduction of [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/) like :
