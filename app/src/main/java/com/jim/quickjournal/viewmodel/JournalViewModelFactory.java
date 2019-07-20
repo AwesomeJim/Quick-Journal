@@ -15,9 +15,9 @@
  */
 package com.jim.quickjournal.viewmodel;
 
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.annotation.NonNull;
 import com.jim.quickjournal.db.JournalDatabase;
 
 public class JournalViewModelFactory extends ViewModelProvider.NewInstanceFactory {
