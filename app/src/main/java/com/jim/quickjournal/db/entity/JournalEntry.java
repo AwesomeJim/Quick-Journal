@@ -19,7 +19,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
 import com.jim.quickjournal.model.Journal;
+
 import java.util.Date;
 
 /**
@@ -36,6 +38,13 @@ public class JournalEntry implements Journal{
     private Date updatedOn;
 
 
+    /**
+     * Instantiates a new Journal entry.
+     *
+     * @param title     the title
+     * @param body      the body
+     * @param updatedOn the updated on
+     */
     @Ignore  //tell Room to ignore this Constructor
     public JournalEntry(String title, String body, Date updatedOn) {
         this.title = title;
@@ -43,6 +52,14 @@ public class JournalEntry implements Journal{
         this.updatedOn = updatedOn;
     }
 
+    /**
+     * Instantiates a new Journal entry.
+     *
+     * @param id        the id
+     * @param title     the title
+     * @param body      the body
+     * @param updatedOn the updated on
+     */
     public JournalEntry(int id, String title, String body, Date updatedOn) {
         this.id = id;
         this.title = title;
@@ -54,6 +71,11 @@ public class JournalEntry implements Journal{
         return id;
     }
 
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
     public void setId(int id) {
         this.id = id;
     }
@@ -62,6 +84,11 @@ public class JournalEntry implements Journal{
         return title;
     }
 
+    /**
+     * Sets title.
+     *
+     * @param title the title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
@@ -70,6 +97,11 @@ public class JournalEntry implements Journal{
         return body;
     }
 
+    /**
+     * Sets body.
+     *
+     * @param body the body
+     */
     public void setBody(String body) {
         this.body = body;
     }
@@ -78,6 +110,11 @@ public class JournalEntry implements Journal{
         return updatedOn;
     }
 
+    /**
+     * Sets updated on.
+     *
+     * @param updatedOn the updated on
+     */
     public void setUpdatedOn(Date updatedOn) {
         this.updatedOn = updatedOn;
     }

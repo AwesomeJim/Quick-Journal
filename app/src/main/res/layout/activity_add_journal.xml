@@ -42,7 +42,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editText_journal_title"
                 android:layout_width="match_parent"
@@ -115,7 +116,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/EditText_title_layout"
             app:layout_constraintVertical_bias="1.0"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editText_journal_body"

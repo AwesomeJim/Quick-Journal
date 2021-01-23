@@ -66,5 +66,15 @@ fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
 
-/app/release/output.json
-/app/debug/output.json
+.idea/caches/
+.idea/codeStyles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml
+Quick-Journal.iml
+app/google-services.json
+app/src/main/res/mipmap-anydpi-v26/
+gradle/
+gradlew
+gradlew.bat

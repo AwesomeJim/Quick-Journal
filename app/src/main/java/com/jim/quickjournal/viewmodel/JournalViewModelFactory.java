@@ -15,9 +15,10 @@
  */
 package com.jim.quickjournal.viewmodel;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.annotation.NonNull;
+
 import com.jim.quickjournal.db.JournalDatabase;
 
 public class JournalViewModelFactory extends ViewModelProvider.NewInstanceFactory {

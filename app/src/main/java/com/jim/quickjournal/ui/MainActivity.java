@@ -16,28 +16,30 @@
  */
 package com.jim.quickjournal.ui;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -46,8 +48,10 @@ import com.jim.quickjournal.db.JournalDatabase;
 import com.jim.quickjournal.db.entity.JournalEntry;
 import com.jim.quickjournal.viewmodel.MainViewModel;
 import com.squareup.picasso.Picasso;
-import de.hdodenhof.circleimageview.CircleImageView;
+
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements JournalAdapter.ItemClickListener,NavigationView.OnNavigationItemSelectedListener {
 
@@ -202,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements JournalAdapter.It
 
 
     private void setUpViewModel(){
-      MainViewModel viewModel= ViewModelProviders.of(this).get(MainViewModel.class);
+      MainViewModel viewModel= new ViewModelProvider(this).get(MainViewModel.class);
      viewModel.getJournalEntryLiveData().observe(this, new Observer<List<JournalEntry>>() {
         @Override public void onChanged(@Nullable List<JournalEntry> journalEntries) {
           mAdapter.setJournals(journalEntries);

@@ -16,25 +16,27 @@
 
 package com.jim.quickjournal.ui;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import androidx.annotation.Nullable;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.jim.quickjournal.AppExecutors;
 import com.jim.quickjournal.R;
 import com.jim.quickjournal.db.JournalDatabase;
 import com.jim.quickjournal.db.entity.JournalEntry;
 import com.jim.quickjournal.viewmodel.JournalViewModel;
 import com.jim.quickjournal.viewmodel.JournalViewModelFactory;
+
 import java.util.Date;
 
 /**
@@ -89,7 +91,7 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
                */
               JournalViewModelFactory modelFactory=new JournalViewModelFactory(mDb,mJournalId);
               final JournalViewModel
-                  viewModel= ViewModelProviders.of(this,modelFactory).get(JournalViewModel.class);
+                  viewModel= new ViewModelProvider(this,modelFactory).get(JournalViewModel.class);
                 viewModel.getJournalEntryLiveData().observe(this, new Observer<JournalEntry>() {
                   @Override public void onChanged(@Nullable JournalEntry jEntry) {
                  viewModel.getJournalEntryLiveData().removeObserver(this);
@@ -187,6 +189,7 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
       });
 
     }
+
 
     /**
      * populateUI would be called to populate the UI when in update mode

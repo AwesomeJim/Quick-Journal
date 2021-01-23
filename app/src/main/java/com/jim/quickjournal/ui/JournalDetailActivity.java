@@ -16,26 +16,29 @@
 
 package com.jim.quickjournal.ui;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.jim.quickjournal.AppExecutors;
 import com.jim.quickjournal.R;
 import com.jim.quickjournal.db.JournalDatabase;
 import com.jim.quickjournal.db.entity.JournalEntry;
 import com.jim.quickjournal.viewmodel.JournalViewModel;
 import com.jim.quickjournal.viewmodel.JournalViewModelFactory;
+
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 

@@ -19,14 +19,17 @@ package com.jim.quickjournal.ui;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.jim.quickjournal.R;
 import com.jim.quickjournal.db.entity.JournalEntry;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -135,6 +138,8 @@ public interface ItemClickListener {
     Random rnd = new Random();
     return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
   }
+
+
 // Inner class for creating ViewHolders
 class JournalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

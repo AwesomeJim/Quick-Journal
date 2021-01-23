@@ -17,6 +17,7 @@ package com.jim.quickjournal.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
+
 import com.jim.quickjournal.db.JournalDatabase;
 import com.jim.quickjournal.db.entity.JournalEntry;
 
