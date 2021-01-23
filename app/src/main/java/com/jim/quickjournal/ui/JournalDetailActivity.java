@@ -16,7 +16,6 @@
 
 package com.jim.quickjournal.ui;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -168,17 +167,10 @@ public class JournalDetailActivity extends AppCompatActivity implements View.OnC
         .setTitle("Confirm Deletion!")
         .setMessage("are you sure you want to delete this journal?")
         .setPositiveButton("No Cancel", null)
-        .setNegativeButton("yes Delete", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-              @Override public void run() {
-                mDb.journalDao().deleteJournal(mJournalEntry);
-                finish();
-              }
-            });
-          }
-        })
+        .setNegativeButton("yes Delete", (dialog, which) -> AppExecutors.getInstance().diskIO().execute(() -> {
+          mDb.journalDao().deleteJournal(mJournalEntry);
+          finish();
+        }))
         .setIcon(R.drawable.ic_delete)
         .show();
   }

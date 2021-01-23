@@ -24,20 +24,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,11 +41,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.jim.quickjournal.R;
 import com.jim.quickjournal.db.JournalDatabase;
-import com.jim.quickjournal.db.entity.JournalEntry;
 import com.jim.quickjournal.viewmodel.MainViewModel;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -143,12 +136,9 @@ public class MainActivity extends AppCompatActivity implements JournalAdapter.It
 
         //Floating Action Button for adding a Journal entry
         FloatingActionButton fab =  findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent startAddJournalActivity=new Intent(MainActivity.this, AddJournalActivity.class);
-                startActivity(startAddJournalActivity);
-            }
+        fab.setOnClickListener(view -> {
+            Intent startAddJournalActivity=new Intent(MainActivity.this, AddJournalActivity.class);
+            startActivity(startAddJournalActivity);
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -190,11 +180,9 @@ public class MainActivity extends AppCompatActivity implements JournalAdapter.It
         if(id==R.id.nav_logout){
             AuthUI.getInstance()
                 .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Intent intent= new Intent(MainActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                    }
+                .addOnCompleteListener(task -> {
+                    Intent intent= new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 });
 
         }
@@ -207,11 +195,7 @@ public class MainActivity extends AppCompatActivity implements JournalAdapter.It
 
     private void setUpViewModel(){
       MainViewModel viewModel= new ViewModelProvider(this).get(MainViewModel.class);
-     viewModel.getJournalEntryLiveData().observe(this, new Observer<List<JournalEntry>>() {
-        @Override public void onChanged(@Nullable List<JournalEntry> journalEntries) {
-          mAdapter.setJournals(journalEntries);
-        }
-      });
+     viewModel.getJournalEntryLiveData().observe(this, journalEntries -> mAdapter.setJournals(journalEntries));
     }
 
     @Override
