@@ -170,22 +170,19 @@ public class AddJournalActivity extends AppCompatActivity implements View.OnClic
         Date date = new Date();
       final JournalEntry journalEntry = new JournalEntry(title, body, date);
 
-      AppExecutors.getInstance().diskIO().execute(new Runnable() {
-        @Override
-        public void run() {
-          // insert the task only if mJournalId matches DEFAULT_JOURNAL_ID
-          // Otherwise update it
-          // call finish in any case
-          if (mJournalId == DEFAULT_JOURNAL_ID) {
-            // insert new task
-            mDb.journalDao().insertJournal(journalEntry);
-          } else {
-            //update task
-            journalEntry.setId(mJournalId);
-            mDb.journalDao().updateJournal(journalEntry);
-          }
-          finish();
+      AppExecutors.getInstance().diskIO().execute(() -> {
+        // insert the task only if mJournalId matches DEFAULT_JOURNAL_ID
+        // Otherwise update it
+        // call finish in any case
+        if (mJournalId == DEFAULT_JOURNAL_ID) {
+          // insert new task
+          mDb.journalDao().insertJournal(journalEntry);
+        } else {
+          //update task
+          journalEntry.setId(mJournalId);
+          mDb.journalDao().updateJournal(journalEntry);
         }
+        finish();
       });
 
     }

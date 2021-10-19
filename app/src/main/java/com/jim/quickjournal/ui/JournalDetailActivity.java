@@ -23,11 +23,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -72,13 +70,11 @@ public class JournalDetailActivity extends AppCompatActivity implements View.OnC
     if (intent != null && intent.hasExtra(EXTRA_JOURNAL_ID)) {
        int mJournalId = intent.getIntExtra(EXTRA_JOURNAL_ID,-1);
       JournalViewModelFactory modelFactory=new JournalViewModelFactory(mDb,mJournalId);
-      JournalViewModel viewModel= ViewModelProviders.of(this,modelFactory).get(JournalViewModel.class);
-         viewModel.getJournalEntryLiveData().observe(this, new Observer<JournalEntry>() {
-           @Override public void onChanged(@Nullable JournalEntry jEntry) {
-             //journalEntry.removeObserver(this);
-             populateUI(jEntry);
-             mJournalEntry=jEntry;
-           }
+      JournalViewModel viewModel= new ViewModelProvider(this,modelFactory).get(JournalViewModel.class);
+         viewModel.getJournalEntryLiveData().observe(this, jEntry -> {
+           //journalEntry.removeObserver(this);
+           populateUI(jEntry);
+           mJournalEntry=jEntry;
          });
 
 
