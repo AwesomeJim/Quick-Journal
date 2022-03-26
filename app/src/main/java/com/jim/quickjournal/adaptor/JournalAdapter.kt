@@ -21,6 +21,7 @@ import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.jim.quickjournal.R
@@ -100,6 +101,7 @@ class JournalAdapter @Inject constructor() : RecyclerView.Adapter<JournalViewHol
         holder.JournalBodyView.text = body
         holder.JournalDateView.text = updatedOn
         holder.intial.text = dateFormatInit.format(journalEntry.updatedOn)
+        setAnimation(holder.itemView, position)
     }
 
     /**
@@ -112,9 +114,6 @@ class JournalAdapter @Inject constructor() : RecyclerView.Adapter<JournalViewHol
         } else mJournalEntries!!.size
     }
 
-    interface ItemClickListener {
-        fun onItemClickListener(itemId: Int)
-    }
 
     /**
      *
@@ -158,5 +157,19 @@ class JournalAdapter @Inject constructor() : RecyclerView.Adapter<JournalViewHol
         // Constant for date format
         private const val DATE_FORMAT = "d MMM yyyy HH:mm aa"
         private const val DATE_FORMAT_INIT = "EEE"
+    }
+    /**
+     * Here is the key method to apply the animation
+     */
+    private var lastPosition = -1
+
+    private fun setAnimation(viewToAnimate: View, position: Int) {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition) {
+            val animation =
+                AnimationUtils.loadAnimation(ctx, R.anim.slide_in_bottom)
+            viewToAnimate.startAnimation(animation)
+            lastPosition = position
+        }
     }
 }
