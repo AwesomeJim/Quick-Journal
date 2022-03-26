@@ -13,23 +13,61 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jim.quickjournal.viewmodel;
+package com.jim.quickjournal.viewmodel
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.jim.quickjournal.db.JournalRepositoryImpl
+import com.jim.quickjournal.db.entity.JournalEntry
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-import com.jim.quickjournal.db.JournalDatabase;
-import com.jim.quickjournal.db.entity.JournalEntry;
+@HiltViewModel
+class JournalViewModel @Inject constructor(private val journalRepo: JournalRepositoryImpl) :
+    ViewModel() {
 
-public class JournalViewModel extends ViewModel {
+    private val _journalList = MutableLiveData<List<JournalEntry>>()
 
-  private LiveData<JournalEntry> journalEntryLiveData;
+    val journalList: LiveData<List<JournalEntry>>
+        get() = _journalList
 
-  public JournalViewModel(JournalDatabase mdb, int journalId) {
-    journalEntryLiveData=mdb.journalDao().loadJournalById(journalId);
-  }
+    private val _journalItem = MutableLiveData<JournalEntry>()
+    val journalItem: LiveData<JournalEntry>
+        get() = _journalItem
 
-  public LiveData<JournalEntry> getJournalEntryLiveData(){
-    return  journalEntryLiveData;
-  }
+    fun loadAllJournals() {
+        viewModelScope.launch {
+            _journalList.value = journalRepo.loadAllJournals()
+        }
+
+    }
+
+    fun insertJournal(journalEntry: JournalEntry) {
+        viewModelScope.launch {
+            journalRepo.insertJournal(journalEntry)
+        }
+    }
+
+    fun updateJournal(journalEntry: JournalEntry) {
+        viewModelScope.launch {
+            journalRepo.updateJournal(journalEntry)
+        }
+    }
+
+    fun deleteJournal(journalEntry: JournalEntry) {
+        viewModelScope.launch {
+            journalRepo.deleteJournal(journalEntry)
+        }
+    }
+
+
+    fun loadJournalById(id: Int) {
+        viewModelScope.launch {
+            _journalItem.value = journalRepo.loadAllJournalWithID(id)
+        }
+    }
+
 }

@@ -13,25 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jim.quickjournal.db.converter;
+package com.jim.quickjournal.db.converter
 
-import androidx.room.TypeConverter;
-
-import java.util.Date;
+import androidx.room.TypeConverter
+import java.util.*
 
 /**
  * Converts Date to a Long and Back
  * This enable room to save the date
  */
-public class DateConverter {
-
+object DateConverter {
     @TypeConverter
-    public static Date toDate(Long timestamp) {
-        return timestamp == null ? null : new Date(timestamp);
+    fun toDate(timestamp: Long?): Date? {
+        return if (timestamp == null) null else Date(timestamp)
     }
 
     @TypeConverter
-    public static Long toTimestamp(Date date) {
-        return date == null ? null : date.getTime();
+    fun toTimestamp(date: Date?): Long? {
+        return date?.time
     }
 }

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
+        android:name=".QuickJournalApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,24 +15,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".ui.AddJournalActivity"
+            android:name=".ui.activities.AddJournalActivity"
             android:label="@string/activity_add_journal_title"
             android:logo="@drawable/ic_action_edit_journal"
-            android:parentActivityName=".ui.MainActivity"/>
-        <activity android:name=".ui.LoginActivity">
+            android:parentActivityName=".ui.activities.MainActivity"/>
+        <activity android:name=".ui.activities.LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.JournalDetailActivity"
+        <activity android:name=".ui.activities.JournalDetailActivity"
             android:label="@string/myJournal"
-            android:parentActivityName=".ui.MainActivity">
+            android:parentActivityName=".ui.activities.MainActivity">
         </activity>
     </application>
 
