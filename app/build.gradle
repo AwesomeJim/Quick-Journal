@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
   compileSdkVersion rootProject.compileSdkVersion
-  buildToolsVersion rootProject.buildToolsVersion
   defaultConfig {
     minSdkVersion rootProject.minSdkVersion
     targetSdkVersion rootProject.targetSdkVersion
@@ -19,17 +18,16 @@ android {
     }
   }
 
-  lintOptions {
-    disable 'ContentDescription'
-    checkReleaseBuilds true
-    // Or, if you prefer, you can continue to check for errors in release builds,
-    // but continue the build even when errors are found:
-    abortOnError false
-  }
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
   }
+  lint {
+    abortOnError false
+    checkReleaseBuilds true
+    disable 'ContentDescription'
+  }
+  namespace 'com.jim.quickjournal'
 }
 
 dependencies {
