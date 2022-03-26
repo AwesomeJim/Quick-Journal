@@ -8,7 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Provider
 import javax.inject.Singleton
 
 
@@ -19,15 +18,12 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideAppDatabase(
-        @ApplicationContext appContext: Context,
-        provider: Provider<JournalDao>
+        @ApplicationContext appContext: Context
     ): JournalDatabase {
         return Room.databaseBuilder(
             appContext,
             JournalDatabase::class.java,
             "quickjournal"
-        ).addCallback(
-            JournalCallBack(provider)
         ).build()
     }
 
