@@ -73,10 +73,12 @@ class JournalDetailFragment : Fragment() {
         initViews()
         if (mJournalId != DEFAULT_JOURNAL_ID) {
             lifecycle.coroutineScope.launch {
-                viewModel.loadJournalById(mJournalId).collect {
-                    //journalEntry.removeObserver(this);
-                    populateUI(it)
-                    mJournalEntry = it
+                viewModel.loadJournalById(mJournalId)?.collect {
+                    it.let { jj ->
+                        populateUI(jj)
+                        mJournalEntry = jj
+                    }
+
                 }
             }
         }
@@ -99,10 +101,13 @@ class JournalDetailFragment : Fragment() {
      *
      * @param journalEntry the Journal Entry to populate the UI
      */
-    private fun populateUI(journalEntry: JournalEntry) {
-        binding.editTextJournalTitle.setText(journalEntry.title)
-        binding.editTextJournalBody.setText(journalEntry.body)
-        binding.textViewDate.text = dateFormat.format(journalEntry.updatedOn)
+    private fun populateUI(journalEntry: JournalEntry?) {
+        journalEntry?.let {
+            binding.editTextJournalTitle.setText(it.title)
+            binding.editTextJournalBody.setText(it.body)
+            binding.textViewDate.text = dateFormat.format(it.updatedOn)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

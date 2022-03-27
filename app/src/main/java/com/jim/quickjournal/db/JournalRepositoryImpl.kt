@@ -9,11 +9,11 @@ import javax.inject.Inject
 
 class JournalRepositoryImpl @Inject constructor(private val journalDao: JournalDao) {
 
-    suspend fun loadAllJournals(): Flow<List<JournalEntry>> = withContext(Dispatchers.IO)  {
+    suspend fun loadAllJournals(): Flow<List<JournalEntry>>? = withContext(Dispatchers.IO)  {
         return@withContext journalDao.loadAllJournals()
     }
 
-    suspend fun loadAllJournalWithID(id: Int): Flow<JournalEntry> = withContext(Dispatchers.IO){
+    suspend fun loadAllJournalWithID(id: Int): Flow<JournalEntry>? = withContext(Dispatchers.IO){
         return@withContext journalDao.loadJournalById(id)
     }
 

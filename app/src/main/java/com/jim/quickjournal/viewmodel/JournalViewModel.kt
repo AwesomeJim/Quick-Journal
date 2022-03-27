@@ -36,7 +36,7 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
 //    val journalItem: LiveData<JournalEntry>
 //        get() = _journalItem
 
-    suspend fun loadAllJournals(): Flow<List<JournalEntry>> = journalRepo.loadAllJournals()
+    suspend fun loadAllJournals(): Flow<List<JournalEntry>>? = journalRepo.loadAllJournals()
 
     fun insertJournal(journalEntry: JournalEntry) {
         viewModelScope.launch {
@@ -56,6 +56,6 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
         }
     }
 
-    suspend fun loadJournalById(id: Int): Flow<JournalEntry> = journalRepo.loadAllJournalWithID(id)
+    suspend fun loadJournalById(id: Int): Flow<JournalEntry>? = journalRepo.loadAllJournalWithID(id)
 
 }

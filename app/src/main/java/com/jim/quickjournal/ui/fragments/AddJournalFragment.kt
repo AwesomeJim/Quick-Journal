@@ -76,7 +76,7 @@ class AddJournalFragment : Fragment(), View.OnClickListener {
              * Load the Journal entry form the ViewModel
              */
             lifecycle.coroutineScope.launch {
-                viewModel.loadJournalById(mJournalId).collect {
+                viewModel.loadJournalById(mJournalId)?.collect {
                     populateUI(it)
 
                 }
