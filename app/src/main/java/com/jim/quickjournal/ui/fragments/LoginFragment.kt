@@ -13,25 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jim.quickjournal.ui.activities
+package com.jim.quickjournal.ui.fragments
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig.*
 import com.google.firebase.auth.FirebaseAuth
 import com.jim.quickjournal.R
+import com.jim.quickjournal.databinding.ActivityLoginBinding
 
 /**
  * The Main launcher
  * activity prompts users to log in if not logged in
  *
  */
-class LoginActivity : AppCompatActivity() {
+class LoginFragment : Fragment() {
     // Choose authentication providers
     private var providers = listOf(
         EmailBuilder().build(),
@@ -39,16 +43,27 @@ class LoginActivity : AppCompatActivity() {
         GoogleBuilder().build()
     )
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+    private var _binding: ActivityLoginBinding? = null
+    private val binding get() = _binding!!
+    internal var view: View? = null
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = ActivityLoginBinding.inflate(inflater, container, false)
+        view = binding.root
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        this.view = view
         //Check if User is already singed in
         val auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
             //user is already signed in
             navToMain()
-            finish()
         } else {
             //prompt th user to login
             signIn()
@@ -71,15 +86,13 @@ class LoginActivity : AppCompatActivity() {
                 // IdpResponse response = IdpResponse.fromResultIntent(data);
                 // Successfully signed in
                 navToMain()
-                finish()
             }
         }
 
 
     //Launch the Main App
     private fun navToMain() {
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-        startActivity(intent)
+        this.findNavController().navigate(R.id.action_nav_to_homeFragment)
     }
 
     companion object {

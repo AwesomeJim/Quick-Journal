@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jim.quickjournal.ui.activities
+package com.jim.quickjournal.ui.fragments
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.TextView
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
+import android.view.*
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
+import androidx.navigation.fragment.findNavController
 import com.jim.quickjournal.R
+import com.jim.quickjournal.databinding.ActivityAddJournalBinding
 import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.*
 
 /**
@@ -36,41 +35,51 @@ import java.util.*
  *
  */
 @AndroidEntryPoint
-class AddJournalActivity : AppCompatActivity(), View.OnClickListener {
+class AddJournalFragment : Fragment(), View.OnClickListener {
     // Fields for views
     private val viewModel: JournalViewModel by viewModels()
-    var mJournalTitleEditText: TextInputEditText? = null
-    var mJournalBodyEditText: TextInputEditText? = null
-    var mDateView: TextView? = null
-    lateinit var btn_Cancel: MaterialButton
-    lateinit var btn_Save: MaterialButton
+
     private var mJournalId = DEFAULT_JOURNAL_ID
+    private var _binding: ActivityAddJournalBinding? = null
+    private val binding get() = _binding!!
+    internal var view: View? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = ActivityAddJournalBinding.inflate(inflater, container, false)
+        view = binding.root
+        return view
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_journal)
+        arguments?.let {
+            mJournalId = it.getInt(EXTRA_JOURNAL_ID)
+        }
+        setHasOptionsMenu(true)
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        this.view = view
         initViews()
-
-
         if (savedInstanceState != null && savedInstanceState.containsKey(INSTANCE_JOURNAL_ID)) {
             mJournalId = savedInstanceState.getInt(INSTANCE_JOURNAL_ID, DEFAULT_JOURNAL_ID)
         }
-        val intent = intent
-        if (intent != null && intent.hasExtra(EXTRA_JOURNAL_ID)) {
-            btn_Save.setText(R.string.update_button)
-            if (mJournalId == DEFAULT_JOURNAL_ID) {
-                mJournalId = intent.getIntExtra(EXTRA_JOURNAL_ID, DEFAULT_JOURNAL_ID)
-                /**
-                 * Load the Journal entry form the ViewModel
-                 */
-                viewModel.loadJournalById(mJournalId)
-                viewModel.journalItem.observe(this, object : Observer<JournalEntry?> {
-                    override fun onChanged(jEntry: JournalEntry?) {
-                        viewModel.journalItem.removeObserver(this)
-                        populateUI(jEntry)
-                    }
-                })
+        if (mJournalId != DEFAULT_JOURNAL_ID) {
+            binding.buttonSave.setText(R.string.update_button)
+            /**
+             * Load the Journal entry form the ViewModel
+             */
+            lifecycle.coroutineScope.launch {
+                viewModel.loadJournalById(mJournalId).collect {
+                    populateUI(it)
+
+                }
             }
         }
     }
@@ -80,18 +89,18 @@ class AddJournalActivity : AppCompatActivity(), View.OnClickListener {
         super.onSaveInstanceState(outState)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_activity_addjournal, menu)
-        return true
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_activity_addjournal, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
-            R.id.bar_cancel_btn -> finish()
+            R.id.bar_cancel_btn -> this.findNavController().popBackStack()
             R.id.bar_save_btn -> onSaveButtonClicked()
         }
         return super.onOptionsItemSelected(item)
@@ -101,19 +110,14 @@ class AddJournalActivity : AppCompatActivity(), View.OnClickListener {
      * initViews is called from onCreate to init the member variable views
      */
     private fun initViews() {
-        mJournalTitleEditText = findViewById(R.id.editText_journal_title)
-        mJournalBodyEditText = findViewById(R.id.editText_journal_body)
-        mDateView = findViewById(R.id.textView_date)
-        btn_Cancel = findViewById(R.id.button_cancel)
-        btn_Save = findViewById(R.id.button_save)
-        btn_Save.setOnClickListener(this)
-        btn_Cancel.setOnClickListener(this)
+        binding.buttonSave.setOnClickListener(this)
+        binding.buttonCancel.setOnClickListener(this)
     }
 
     //Handle the OnclickListeners of the views
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.button_cancel -> finish()
+            R.id.button_cancel -> this.findNavController().popBackStack()
             R.id.button_save -> onSaveButtonClicked()
             else -> {}
         }
@@ -124,8 +128,8 @@ class AddJournalActivity : AppCompatActivity(), View.OnClickListener {
      * It retrieves user input and inserts that new Journal Entry data into the underlying database.
      */
     private fun onSaveButtonClicked() {
-        val title = mJournalTitleEditText!!.text.toString()
-        val body = mJournalBodyEditText!!.text.toString()
+        val title = binding.editTextJournalTitle.text.toString()
+        val body = binding.editTextBodyLayout.editText?.text.toString()
         val date = Date()
         val journalEntry = JournalEntry(title = title, body = body, updatedOn = date)
 
@@ -140,7 +144,7 @@ class AddJournalActivity : AppCompatActivity(), View.OnClickListener {
             journalEntry.id = mJournalId
             viewModel.updateJournal(journalEntry)
         }
-        finish()
+        this.findNavController().popBackStack()
 
     }
 
@@ -150,8 +154,10 @@ class AddJournalActivity : AppCompatActivity(), View.OnClickListener {
      * @param journalEntry the Journal Entry to populate the UI
      */
     private fun populateUI(journalEntry: JournalEntry?) {
-        mJournalTitleEditText!!.setText(journalEntry!!.title)
-        mJournalBodyEditText!!.setText(journalEntry.body)
+        journalEntry?.let {
+            binding.editTextJournalTitle.setText(it.title)
+            binding.editTextBodyLayout.editText?.setText(it.body)
+        }
     }
 
     companion object {

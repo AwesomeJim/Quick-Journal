@@ -13,50 +13,71 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jim.quickjournal.ui.activities
+package com.jim.quickjournal.ui.fragments
 
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.TextView
-import androidx.activity.viewModels
+import android.view.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
+import androidx.navigation.fragment.findNavController
 import com.jim.quickjournal.R
+import com.jim.quickjournal.databinding.ActivityJournalDetailBinding
 import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class JournalDetailActivity : AppCompatActivity() {
+class JournalDetailFragment : Fragment() {
     // Date formatter
     private val viewModel: JournalViewModel by viewModels()
 
     private val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-    var mJournalTitleEditText: TextInputEditText? = null
-    var mJournalBodyEditText: TextInputEditText? = null
-    var mDateView: TextView? = null
-    lateinit var btn_delete: MaterialButton
-    lateinit var btn_update: MaterialButton
+
+    private var _binding: ActivityJournalDetailBinding? = null
+    private val binding get() = _binding!!
+    internal var view: View? = null
+
     lateinit var mJournalEntry: JournalEntry
+    private val DEFAULT_JOURNAL_ID = -1
+    var mJournalId: Int = DEFAULT_JOURNAL_ID
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_journal_detail)
+        arguments?.let {
+            mJournalId = it.getInt(AddJournalFragment.EXTRA_JOURNAL_ID)
+        }
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = ActivityJournalDetailBinding.inflate(inflater, container, false)
+        view = binding.root
+        return view
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        this.view = view
         initViews()
-        val intent = intent
-        if (intent != null && intent.hasExtra(EXTRA_JOURNAL_ID)) {
-            val mJournalId = intent.getIntExtra(EXTRA_JOURNAL_ID, -1)
-            viewModel.loadJournalById(mJournalId)
-            viewModel.journalItem.observe(this) { jEntry: JournalEntry ->
-                //journalEntry.removeObserver(this);
-                populateUI(jEntry)
-                mJournalEntry = jEntry
+        if (mJournalId != DEFAULT_JOURNAL_ID) {
+            lifecycle.coroutineScope.launch {
+                viewModel.loadJournalById(mJournalId).collect {
+                    //journalEntry.removeObserver(this);
+                    populateUI(it)
+                    mJournalEntry = it
+                }
             }
         }
     }
@@ -65,15 +86,10 @@ class JournalDetailActivity : AppCompatActivity() {
      * Initialize the activity Views
      */
     private fun initViews() {
-        mJournalTitleEditText = findViewById(R.id.editText_journal_title)
-        mJournalBodyEditText = findViewById(R.id.editText_journal_body)
-        mDateView = findViewById(R.id.textView_date)
-        btn_delete = findViewById(R.id.button_delete)
-        btn_update = findViewById(R.id.button_update)
-        btn_update.setOnClickListener {
+        binding.buttonUpdate.setOnClickListener {
             upDateJournal()
         }
-        btn_delete.setOnClickListener {
+        binding.buttonDelete.setOnClickListener {
             deleteJournal()
         }
     }
@@ -84,23 +100,21 @@ class JournalDetailActivity : AppCompatActivity() {
      * @param journalEntry the Journal Entry to populate the UI
      */
     private fun populateUI(journalEntry: JournalEntry) {
-        mJournalTitleEditText!!.setText(journalEntry.title)
-        mJournalBodyEditText!!.setText(journalEntry.body)
-        mDateView!!.text = dateFormat.format(journalEntry.updatedOn)
+        binding.editTextJournalTitle.setText(journalEntry.title)
+        binding.editTextJournalBody.setText(journalEntry.body)
+        binding.textViewDate.text = dateFormat.format(journalEntry.updatedOn)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_journal_detail_activity, menu)
-        return true
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_journal_detail_activity, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-        when (id) {
+        when (item.itemId) {
             R.id.bar_edit_property -> upDateJournal()
             else -> {}
         }
@@ -112,9 +126,9 @@ class JournalDetailActivity : AppCompatActivity() {
      * Called when update Journal button is clicked
      */
     private fun upDateJournal() {
-        val intent = Intent(this@JournalDetailActivity, AddJournalActivity::class.java)
-        intent.putExtra(AddJournalActivity.EXTRA_JOURNAL_ID, mJournalEntry.id)
-        startActivity(intent)
+        val args = Bundle()
+        args.putInt(EXTRA_JOURNAL_ID, mJournalEntry.id)
+        this.findNavController().navigate(R.id.action_nav_to_AddJournalFragment, args)
     }
 
     /**
@@ -122,12 +136,13 @@ class JournalDetailActivity : AppCompatActivity() {
      * with a dialog
      */
     private fun deleteJournal() {
-        AlertDialog.Builder(this)
+        AlertDialog.Builder(requireContext())
             .setTitle("Confirm Deletion!")
             .setMessage("are you sure you want to delete this journal?")
             .setPositiveButton("No Cancel", null)
             .setNegativeButton("yes Delete") { _: DialogInterface?, _: Int ->
                 viewModel.deleteJournal(mJournalEntry)
+                this.findNavController().popBackStack()
             }
             .setIcon(R.drawable.ic_delete)
             .show()

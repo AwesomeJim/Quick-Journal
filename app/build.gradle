@@ -24,10 +24,18 @@ android {
     }
   }
 
+  buildFeatures {
+    dataBinding  true
+    viewBinding  true
+  }
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_11
     targetCompatibility JavaVersion.VERSION_11
   }
+  kotlinOptions {
+    jvmTarget = '11'
+  }
+
   lint {
     abortOnError false
     checkReleaseBuilds true
@@ -56,6 +64,8 @@ dependencies {
 
   // --------Hilt Dependency Injection------------------------------
   implementation "com.google.dagger:hilt-android:$hilt_version"
+  implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
+  implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
   kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
   implementation 'com.jakewharton.timber:timber:5.0.1'

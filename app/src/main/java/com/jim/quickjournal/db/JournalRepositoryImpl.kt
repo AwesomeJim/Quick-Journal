@@ -3,16 +3,17 @@ package com.jim.quickjournal.db
 import com.jim.quickjournal.db.dao.JournalDao
 import com.jim.quickjournal.db.entity.JournalEntry
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class JournalRepositoryImpl @Inject constructor(private val journalDao: JournalDao) {
 
-    suspend fun loadAllJournals(): List<JournalEntry> = withContext(Dispatchers.IO)  {
+    suspend fun loadAllJournals(): Flow<List<JournalEntry>> = withContext(Dispatchers.IO)  {
         return@withContext journalDao.loadAllJournals()
     }
 
-    suspend fun loadAllJournalWithID(id: Int): JournalEntry = withContext(Dispatchers.IO){
+    suspend fun loadAllJournalWithID(id: Int): Flow<JournalEntry> = withContext(Dispatchers.IO){
         return@withContext journalDao.loadJournalById(id)
     }
 

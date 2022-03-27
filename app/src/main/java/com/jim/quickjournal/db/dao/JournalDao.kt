@@ -17,6 +17,7 @@ package com.jim.quickjournal.db.dao
 
 import androidx.room.*
 import com.jim.quickjournal.db.entity.JournalEntry
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Room Data Access Object
@@ -24,7 +25,7 @@ import com.jim.quickjournal.db.entity.JournalEntry
 @Dao
 interface JournalDao {
     @Query("SELECT * FROM journals ORDER BY updated_on DESC")
-    fun loadAllJournals(): List<JournalEntry>
+    fun loadAllJournals(): Flow<List<JournalEntry>>
 
     @Insert
     suspend fun insertJournal(journalEntry: JournalEntry)
@@ -36,5 +37,5 @@ interface JournalDao {
     suspend fun deleteJournal(journalEntry: JournalEntry)
 
     @Query("SELECT * FROM journals WHERE id = :id")
-    fun loadJournalById(id: Int): JournalEntry
+    fun loadJournalById(id: Int): Flow<JournalEntry>
 }

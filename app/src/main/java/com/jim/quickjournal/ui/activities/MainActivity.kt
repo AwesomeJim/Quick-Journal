@@ -15,42 +15,39 @@
  */
 package com.jim.quickjournal.ui.activities
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.jim.quickjournal.R
-import com.jim.quickjournal.adaptor.JournalAdapter
-import com.jim.quickjournal.db.entity.JournalEntry
-import com.jim.quickjournal.viewmodel.JournalViewModel
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener {
 
-    private val viewModel: JournalViewModel by viewModels()
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
-    //Activity Member Variables
-    @Inject
-    lateinit var mAdapter: JournalAdapter
 
     var mAuth: FirebaseAuth? = null
     var user: FirebaseUser? = null
@@ -64,7 +61,7 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
+        navController = findNavController(R.id.nav_host_fragment)
         //Initializes the Firebase instance
         mAuth = FirebaseAuth.getInstance()
 
@@ -74,12 +71,17 @@ class MainActivity : AppCompatActivity(),
             //User is logged in get their details and initialize the views and Load Journals
             loadGoogleUserDetails()
             initViews()
-            setUpViewModel()
         } else {
             //User Not Logged In
-            val intent = Intent(this@MainActivity, LoginActivity::class.java)
-            startActivity(intent)
+            navController.navigate(R.id.action_nav_to_loginFragment)
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return NavigationUI.navigateUp(
+            navController,
+            appBarConfiguration
+        ) || super.onSupportNavigateUp()
     }
 
     /**
@@ -116,20 +118,11 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun initViews() {
-        // Set the RecyclerView to its corresponding view
-        val mRecyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-        // Set the layout for the RecyclerView to be a linear layout, which measures and
-        // positions items within a RecyclerView into a linear list
-        mRecyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Initialize the adapter and attach it to the RecyclerView
-        mRecyclerView.adapter = mAdapter
 
         //Floating Action Button for adding a Journal entry
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
-            val startAddJournalActivity = Intent(this@MainActivity, AddJournalActivity::class.java)
-            startActivity(startAddJournalActivity)
+            navController.navigate(R.id.action_nav_to_AddJournalFragment)
         }
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(
@@ -148,6 +141,21 @@ class MainActivity : AppCompatActivity(),
         Picasso.get()
             .load(photoUrl)
             .into(photo)
+
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.nav_profile, R.id.nav_help, R.id.nav_logout
+            ), drawer
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navigationView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.homeFragment) {
+                fab.visibility = View.VISIBLE
+            } else {
+                fab.visibility = View.GONE
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -166,8 +174,7 @@ class MainActivity : AppCompatActivity(),
             AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener {
-                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
-                    startActivity(intent)
+                    navController.navigate(R.id.action_nav_to_loginFragment)
                 }
         }
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
@@ -175,26 +182,5 @@ class MainActivity : AppCompatActivity(),
         return true
     }
 
-    private fun setUpViewModel() {
-        viewModel.loadAllJournals()
-        viewModel.journalList.observe(this) {
-            mAdapter.setJournalsList(
-                context = this,
-                it
-            )
-            mAdapter.notifyDataSetChanged()
-        }
-        mAdapter.setOnItemClickListener { _, any2, _, ->
-            val journalEntry = any2 as JournalEntry
-            val intent = Intent(this@MainActivity, JournalDetailActivity::class.java)
-            intent.putExtra(AddJournalActivity.EXTRA_JOURNAL_ID, journalEntry.id)
-            startActivity(intent)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadAllJournals()
-    }
 
 }
