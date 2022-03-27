@@ -56,7 +56,9 @@ class JournalDaoTest {
             updatedOn = Date()
         )
         jounalDao.insertJournal(journal)
-        val actual = jounalDao.loadAllJournals().first()
+        // When the repository emits a value
+        val actual = jounalDao.loadAllJournals().first() // Returns the first item in the flow
+
         assertThat(journal).isIn(actual)
 
 
