@@ -28,7 +28,7 @@ import com.jim.quickjournal.databinding.ActivityJournalDetailBinding
 import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -73,13 +73,13 @@ class JournalDetailFragment : Fragment() {
         initViews()
         if (mJournalId != DEFAULT_JOURNAL_ID) {
             lifecycle.coroutineScope.launch {
-                viewModel.loadJournalById(mJournalId)?.collect {
-                    it.let { jj ->
-                        populateUI(jj)
-                        mJournalEntry = jj
-                    }
-
+                val journalEntry = viewModel.loadJournalById(mJournalId)?.first()
+                journalEntry?.let { jj ->
+                    populateUI(jj)
+                    mJournalEntry = jj
                 }
+
+
             }
         }
     }
