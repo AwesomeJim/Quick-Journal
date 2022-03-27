@@ -31,11 +31,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.firebase.ui.auth.AuthUI
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+
 import com.jim.quickjournal.R
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,8 +48,8 @@ class MainActivity : AppCompatActivity(),
     private lateinit var appBarConfiguration: AppBarConfiguration
 
 
-    var mAuth: FirebaseAuth? = null
-    var user: FirebaseUser? = null
+//    var mAuth: FirebaseAuth? = null
+//    var user: FirebaseUser? = null
     var toolbar: Toolbar? = null
     var loginMode: String? = null
     var loginDetails: String? = null
@@ -62,19 +61,19 @@ class MainActivity : AppCompatActivity(),
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         navController = findNavController(R.id.nav_host_fragment)
-        //Initializes the Firebase instance
-        mAuth = FirebaseAuth.getInstance()
-
-        //check if the user is login
-        user = mAuth!!.currentUser
-        if (user != null) {
+//        //Initializes the Firebase instance
+//        mAuth = FirebaseAuth.getInstance()
+//
+//        //check if the user is login
+//        user = mAuth!!.currentUser
+//        if (user != null) {
             //User is logged in get their details and initialize the views and Load Journals
-            loadGoogleUserDetails()
+           // loadGoogleUserDetails()
             initViews()
-        } else {
+        //} else {
             //User Not Logged In
             navController.navigate(R.id.action_nav_to_loginFragment)
-        }
+        //}
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -87,10 +86,10 @@ class MainActivity : AppCompatActivity(),
     /**
      * Get the details of the Logged in User
      */
-    private fun loadGoogleUserDetails() {
-        /**
+/*    private fun loadGoogleUserDetails() {
+        *//**
          * Check which method/Provider a user Used to login
-         */
+         *//*
         for (profile in user!!.providerData) {
             when (profile.providerId) {
                 "google.com" -> {
@@ -115,7 +114,7 @@ class MainActivity : AppCompatActivity(),
                 }
             }
         }
-    }
+    }*/
 
     private fun initViews() {
 
@@ -171,11 +170,11 @@ class MainActivity : AppCompatActivity(),
         // Handle navigation view item clicks here.
         val id = item.itemId
         if (id == R.id.nav_logout) {
-            AuthUI.getInstance()
+           /* AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener {
                     navController.navigate(R.id.action_nav_to_loginFragment)
-                }
+                }*/
         }
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)

@@ -24,9 +24,9 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.AuthUI.IdpConfig.*
-import com.google.firebase.auth.FirebaseAuth
+//import com.firebase.ui.auth.AuthUI
+//import com.firebase.ui.auth.AuthUI.IdpConfig.*
+//import com.google.firebase.auth.FirebaseAuth
 import com.jim.quickjournal.R
 import com.jim.quickjournal.databinding.ActivityLoginBinding
 
@@ -37,11 +37,11 @@ import com.jim.quickjournal.databinding.ActivityLoginBinding
  */
 class LoginFragment : Fragment() {
     // Choose authentication providers
-    private var providers = listOf(
+/*    private var providers = listOf(
         EmailBuilder().build(),
         PhoneBuilder().build(),
         GoogleBuilder().build()
-    )
+    )*/
 
     private var _binding: ActivityLoginBinding? = null
     private val binding get() = _binding!!
@@ -60,24 +60,24 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         this.view = view
         //Check if User is already singed in
-        val auth = FirebaseAuth.getInstance()
+      /*  val auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
             //user is already signed in
             navToMain()
         } else {
             //prompt th user to login
             signIn()
-        }
+        }*/
     }
 
     private fun signIn() {
-        val intent = AuthUI.getInstance()
+      /*  val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .setLogo(R.drawable.journal) // Set logo drawable
             .setTheme(R.style.AppTheme) // Set theme
             .build()
-        startForResult.launch(intent)
+        startForResult.launch(intent)*/
     }
 
     private val startForResult =
