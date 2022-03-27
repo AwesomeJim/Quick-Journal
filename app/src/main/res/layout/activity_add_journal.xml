@@ -23,7 +23,7 @@
     app:cardElevation="2dp"
     app:cardCornerRadius="4dp"
     android:layout_margin="2dp"
-    tools:context=".ui.AddJournalActivity">
+    tools:context=".ui.fragments.AddJournalFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -42,7 +42,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editText_journal_title"
@@ -116,7 +116,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/EditText_title_layout"
             app:layout_constraintVertical_bias="1.0"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlineBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editText_journal_body"

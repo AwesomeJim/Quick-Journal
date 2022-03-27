@@ -24,7 +24,7 @@
     app:cardCornerRadius="4dp"
     android:layout_margin="2dp"
     tools:stlye="@style/MaterialCardView"
-    tools:context=".ui.AddJournalActivity">
+    tools:context=".ui.fragments.AddJournalFragment">
   <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"

@@ -13,39 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jim.quickjournal.db.dao;
+package com.jim.quickjournal.db.dao
 
-
-import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
-import androidx.room.Update;
-
-import com.jim.quickjournal.db.entity.JournalEntry;
-
-import java.util.List;
+import androidx.room.*
+import com.jim.quickjournal.db.entity.JournalEntry
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Room Data Access Object
  */
 @Dao
-public interface JournalDao {
-
+interface JournalDao {
     @Query("SELECT * FROM journals ORDER BY updated_on DESC")
-    LiveData<List<JournalEntry>> loadAllJournals();
+    fun loadAllJournals(): Flow<List<JournalEntry>>
 
     @Insert
-    void insertJournal(JournalEntry journalEntry);
+    suspend fun insertJournal(journalEntry: JournalEntry)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateJournal(JournalEntry journalEntry);
+    suspend fun updateJournal(journalEntry: JournalEntry)
 
     @Delete
-    void deleteJournal(JournalEntry journalEntry);
+    suspend fun deleteJournal(journalEntry: JournalEntry)
 
     @Query("SELECT * FROM journals WHERE id = :id")
-    LiveData<JournalEntry> loadJournalById(int id);
+    fun loadJournalById(id: Int): Flow<JournalEntry>
 }

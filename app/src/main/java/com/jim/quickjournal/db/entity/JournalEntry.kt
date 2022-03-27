@@ -13,23 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jim.quickjournal.viewmodel;
+package com.jim.quickjournal.db.entity
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.util.*
 
-import com.jim.quickjournal.db.JournalDatabase;
-import com.jim.quickjournal.db.entity.JournalEntry;
-
-public class JournalViewModel extends ViewModel {
-
-  private LiveData<JournalEntry> journalEntryLiveData;
-
-  public JournalViewModel(JournalDatabase mdb, int journalId) {
-    journalEntryLiveData=mdb.journalDao().loadJournalById(journalId);
-  }
-
-  public LiveData<JournalEntry> getJournalEntryLiveData(){
-    return  journalEntryLiveData;
-  }
-}
+/**
+ * Models a journal entry and its properties
+ */
+@Entity(tableName = "journals")
+data class JournalEntry(
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    var title: String,
+    var body: String,
+    @ColumnInfo(name = "updated_on") var updatedOn: Date
+)
