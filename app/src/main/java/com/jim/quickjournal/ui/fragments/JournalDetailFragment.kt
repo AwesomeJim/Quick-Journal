@@ -28,7 +28,7 @@ import com.jim.quickjournal.databinding.ActivityJournalDetailBinding
 import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -45,7 +45,6 @@ class JournalDetailFragment : Fragment() {
     internal var view: View? = null
 
     lateinit var mJournalEntry: JournalEntry
-    private val DEFAULT_JOURNAL_ID = -1
     var mJournalId: Int = DEFAULT_JOURNAL_ID
 
 
@@ -73,11 +72,13 @@ class JournalDetailFragment : Fragment() {
         initViews()
         if (mJournalId != DEFAULT_JOURNAL_ID) {
             lifecycle.coroutineScope.launch {
-                viewModel.loadJournalById(mJournalId).collect {
-                    //journalEntry.removeObserver(this);
-                    populateUI(it)
-                    mJournalEntry = it
+                val journalEntry = viewModel.loadJournalById(mJournalId)?.first()
+                journalEntry?.let { jj ->
+                    populateUI(jj)
+                    mJournalEntry = jj
                 }
+
+
             }
         }
     }
@@ -99,10 +100,15 @@ class JournalDetailFragment : Fragment() {
      *
      * @param journalEntry the Journal Entry to populate the UI
      */
-    private fun populateUI(journalEntry: JournalEntry) {
-        binding.editTextJournalTitle.setText(journalEntry.title)
-        binding.editTextJournalBody.setText(journalEntry.body)
-        binding.textViewDate.text = dateFormat.format(journalEntry.updatedOn)
+    private fun populateUI(journalEntry: JournalEntry?) {
+        journalEntry?.let {
+            with(binding) {
+                editTextJournalTitle.setText(it.title)
+                editTextJournalBody.setText(it.body)
+                textViewDate.text = dateFormat.format(it.updatedOn)
+            }
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -111,9 +117,6 @@ class JournalDetailFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.bar_edit_property -> upDateJournal()
             else -> {}
@@ -126,8 +129,9 @@ class JournalDetailFragment : Fragment() {
      * Called when update Journal button is clicked
      */
     private fun upDateJournal() {
-        val args = Bundle()
-        args.putInt(EXTRA_JOURNAL_ID, mJournalEntry.id)
+        val args = Bundle().apply {
+            putInt(EXTRA_JOURNAL_ID, mJournalEntry.id)
+        }
         this.findNavController().navigate(R.id.action_nav_to_AddJournalFragment, args)
     }
 
@@ -154,5 +158,6 @@ class JournalDetailFragment : Fragment() {
 
         // Constant for date format
         private const val DATE_FORMAT = "EEE, d MMM yyyy HH:mm aa"
+        private const val DEFAULT_JOURNAL_ID = -1
     }
 }

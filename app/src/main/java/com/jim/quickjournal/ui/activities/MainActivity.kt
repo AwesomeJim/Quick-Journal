@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(),
             initViews()
         //} else {
             //User Not Logged In
-            navController.navigate(R.id.action_nav_to_loginFragment)
+            //navController.navigate(R.id.action_nav_to_loginFragment)
         //}
     }
 

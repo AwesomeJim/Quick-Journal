@@ -36,26 +36,25 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
 //    val journalItem: LiveData<JournalEntry>
 //        get() = _journalItem
 
-    suspend fun loadAllJournals(): Flow<List<JournalEntry>> = journalRepo.loadAllJournals()
+    suspend fun loadAllJournals(): Flow<List<JournalEntry>>? = journalRepo.loadAllJournals()
 
-    fun insertJournal(journalEntry: JournalEntry) {
+    fun insertJournal(journalEntry: JournalEntry) =
         viewModelScope.launch {
             journalRepo.insertJournal(journalEntry)
-        }
-    }
 
-    fun updateJournal(journalEntry: JournalEntry) {
+        }
+
+    fun updateJournal(journalEntry: JournalEntry) =
         viewModelScope.launch {
             journalRepo.updateJournal(journalEntry)
         }
-    }
 
-    fun deleteJournal(journalEntry: JournalEntry) {
+    fun deleteJournal(journalEntry: JournalEntry) =
         viewModelScope.launch {
             journalRepo.deleteJournal(journalEntry)
-        }
-    }
 
-    suspend fun loadJournalById(id: Int): Flow<JournalEntry> = journalRepo.loadAllJournalWithID(id)
+        }
+
+    suspend fun loadJournalById(id: Int): Flow<JournalEntry>? = journalRepo.loadAllJournalWithID(id)
 
 }

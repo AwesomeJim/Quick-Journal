@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpViewModel() {
         lifecycle.coroutineScope.launch {
-            viewModel.loadAllJournals().collect {
+            viewModel.loadAllJournals()?.collect {
                 mAdapter.setJournalsList(
                     context = requireContext(),
                     it
