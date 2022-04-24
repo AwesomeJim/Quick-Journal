@@ -22,10 +22,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.jim.quickjournal.R
 import com.jim.quickjournal.adaptor.JournalAdapter.JournalViewHolder
+import com.jim.quickjournal.databinding.ItemJournalEntryBinding
 import com.jim.quickjournal.db.entity.JournalEntry
 import java.text.SimpleDateFormat
 import java.util.*
@@ -76,10 +76,8 @@ class JournalAdapter @Inject constructor() : RecyclerView.Adapter<JournalViewHol
      * @return A new JournalViewHolder that holds the view for each task
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): JournalViewHolder {
-        // Inflate the task_layout to a view
-        val view = LayoutInflater.from(ctx)
-            .inflate(R.layout.item_journal_entry, parent, false)
-        return JournalViewHolder(view)
+        val binding = ItemJournalEntryBinding.inflate(LayoutInflater.from(ctx), parent, false)
+        return JournalViewHolder(binding)
     }
 
     /**
@@ -90,17 +88,7 @@ class JournalAdapter @Inject constructor() : RecyclerView.Adapter<JournalViewHol
      */
     override fun onBindViewHolder(holder: JournalViewHolder, position: Int) {
         // Determine the values of the wanted data
-        val journalEntry = mJournalEntries!![position]
-        val title = journalEntry.title
-        val body = journalEntry.body
-        val updatedOn = dateFormat.format(journalEntry.updatedOn)
-        val gradientDrawable = holder.intial.background as GradientDrawable
-        gradientDrawable.setColor(randomColor)
-        //Set values
-        holder.JournalTitleView.text = title
-        holder.JournalBodyView.text = body
-        holder.JournalDateView.text = updatedOn
-        holder.intial.text = dateFormatInit.format(journalEntry.updatedOn)
+        holder.onBind(mJournalEntries!![position])
         setAnimation(holder.itemView, position)
     }
 
@@ -127,29 +115,23 @@ class JournalAdapter @Inject constructor() : RecyclerView.Adapter<JournalViewHol
         }
 
     // Inner class for creating ViewHolders
-    inner class JournalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
-        // Class variables for the task description and priority TextViews
-        var JournalTitleView: TextView
-        var JournalBodyView: TextView
-        var JournalDateView: TextView
-        var intial: TextView
-        override fun onClick(view: View) {
-            //get the Id of the Item Clicked
-            mOnItemClickListener?.invoke(view, mJournalEntries!![adapterPosition], adapterPosition)
-        }
-
-        /**
-         * Constructor for the TaskViewHolders.
-         *
-         * @param itemView The view inflated in onCreateViewHolder
-         */
-        init {
-            JournalTitleView = itemView.findViewById(R.id.textView_journal_title)
-            JournalBodyView = itemView.findViewById(R.id.textView_journal_body)
-            JournalDateView = itemView.findViewById(R.id.textView_journal_date)
-            intial = itemView.findViewById(R.id.imageView_journal)
-            itemView.setOnClickListener(this)
+    inner class JournalViewHolder(private val binding: ItemJournalEntryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun onBind(journalEntry: JournalEntry) = with(binding) {
+            val updatedOn = dateFormat.format(journalEntry.updatedOn)
+            val gradientDrawable = textViewJournal.background as GradientDrawable
+            gradientDrawable.setColor(randomColor)
+            textViewJournalTitle.text = journalEntry.title
+            textViewJournalBody.text = journalEntry.body
+            textViewJournalDate.text = updatedOn
+            textViewJournal.text = dateFormatInit.format(journalEntry.updatedOn)
+            itemView.setOnClickListener {
+                mOnItemClickListener?.invoke(
+                    view,
+                    mJournalEntries!![adapterPosition],
+                    adapterPosition
+                )
+            }
         }
     }
 
@@ -158,6 +140,7 @@ class JournalAdapter @Inject constructor() : RecyclerView.Adapter<JournalViewHol
         private const val DATE_FORMAT = "d MMM yyyy HH:mm aa"
         private const val DATE_FORMAT_INIT = "EEE"
     }
+
     /**
      * Here is the key method to apply the animation
      */

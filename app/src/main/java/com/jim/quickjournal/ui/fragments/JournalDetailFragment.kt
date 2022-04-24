@@ -45,7 +45,6 @@ class JournalDetailFragment : Fragment() {
     internal var view: View? = null
 
     lateinit var mJournalEntry: JournalEntry
-    private val DEFAULT_JOURNAL_ID = -1
     var mJournalId: Int = DEFAULT_JOURNAL_ID
 
 
@@ -103,9 +102,11 @@ class JournalDetailFragment : Fragment() {
      */
     private fun populateUI(journalEntry: JournalEntry?) {
         journalEntry?.let {
-            binding.editTextJournalTitle.setText(it.title)
-            binding.editTextJournalBody.setText(it.body)
-            binding.textViewDate.text = dateFormat.format(it.updatedOn)
+            with(binding) {
+                editTextJournalTitle.setText(it.title)
+                editTextJournalBody.setText(it.body)
+                textViewDate.text = dateFormat.format(it.updatedOn)
+            }
         }
 
     }
@@ -116,9 +117,6 @@ class JournalDetailFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.bar_edit_property -> upDateJournal()
             else -> {}
@@ -131,8 +129,9 @@ class JournalDetailFragment : Fragment() {
      * Called when update Journal button is clicked
      */
     private fun upDateJournal() {
-        val args = Bundle()
-        args.putInt(EXTRA_JOURNAL_ID, mJournalEntry.id)
+        val args = Bundle().apply {
+            putInt(EXTRA_JOURNAL_ID, mJournalEntry.id)
+        }
         this.findNavController().navigate(R.id.action_nav_to_AddJournalFragment, args)
     }
 
@@ -159,5 +158,6 @@ class JournalDetailFragment : Fragment() {
 
         // Constant for date format
         private const val DATE_FORMAT = "EEE, d MMM yyyy HH:mm aa"
+        private const val DEFAULT_JOURNAL_ID = -1
     }
 }
