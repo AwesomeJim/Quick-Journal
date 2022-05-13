@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -151,7 +152,15 @@ class MainActivity : AppCompatActivity(),
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.homeFragment) {
                 fab.visibility = View.VISIBLE
+                supportActionBar?.displayOptions =
+                    ActionBar.DISPLAY_SHOW_HOME or ActionBar.DISPLAY_SHOW_TITLE
+                supportActionBar?.setDisplayShowHomeEnabled(true)
+                supportActionBar?.setDisplayShowTitleEnabled(true)
             } else {
+                supportActionBar?.displayOptions =
+                    ActionBar.DISPLAY_SHOW_TITLE or ActionBar.DISPLAY_HOME_AS_UP
+                supportActionBar?.setHomeButtonEnabled(true)
+                supportActionBar?.setDisplayShowTitleEnabled(true)
                 fab.visibility = View.GONE
             }
         }
