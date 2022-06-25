@@ -37,6 +37,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
 import com.jim.quickjournal.R
+import com.jim.quickjournal.databinding.ActivityMainBinding
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity(),
 
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var binding: ActivityMainBinding
 
 
 //    var mAuth: FirebaseAuth? = null
@@ -58,7 +60,8 @@ class MainActivity : AppCompatActivity(),
     var photoUrl: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         navController = findNavController(R.id.nav_host_fragment)
@@ -68,7 +71,7 @@ class MainActivity : AppCompatActivity(),
 //        //check if the user is login
 //        user = mAuth!!.currentUser
 //        if (user != null) {
-            //User is logged in get their details and initialize the views and Load Journals
+        //User is logged in get their details and initialize the views and Load Journals
            // loadGoogleUserDetails()
             initViews()
         //} else {

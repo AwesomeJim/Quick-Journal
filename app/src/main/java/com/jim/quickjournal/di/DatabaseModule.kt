@@ -1,7 +1,8 @@
-package com.jim.quickjournal.db
+package com.jim.quickjournal.di
 
 import android.content.Context
 import androidx.room.Room
+import com.jim.quickjournal.db.JournalDatabase
 import com.jim.quickjournal.db.dao.JournalDao
 import dagger.Module
 import dagger.Provides
