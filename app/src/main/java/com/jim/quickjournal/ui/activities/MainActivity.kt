@@ -17,25 +17,19 @@ package com.jim.quickjournal.ui.activities
 
 import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-
 import com.jim.quickjournal.R
 import com.jim.quickjournal.databinding.ActivityMainBinding
 import com.squareup.picasso.Picasso
@@ -43,15 +37,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-
-//    var mAuth: FirebaseAuth? = null
+    // var mAuth: FirebaseAuth? = null
 //    var user: FirebaseUser? = null
     var toolbar: Toolbar? = null
     var loginMode: String? = null
@@ -64,20 +56,8 @@ class MainActivity : AppCompatActivity(),
         setContentView(binding.root)
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        navController = findNavController(R.id.nav_host_fragment)
-//        //Initializes the Firebase instance
-//        mAuth = FirebaseAuth.getInstance()
-//
-//        //check if the user is login
-//        user = mAuth!!.currentUser
-//        if (user != null) {
-        //User is logged in get their details and initialize the views and Load Journals
-           // loadGoogleUserDetails()
-            initViews()
-        //} else {
-            //User Not Logged In
-            //navController.navigate(R.id.action_nav_to_loginFragment)
-        //}
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment)
+        initViews()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -91,9 +71,10 @@ class MainActivity : AppCompatActivity(),
      * Get the details of the Logged in User
      */
 /*    private fun loadGoogleUserDetails() {
-        *//**
-         * Check which method/Provider a user Used to login
-         *//*
+        */
+    /**
+     * Check which method/Provider a user Used to login
+     *//*
         for (profile in user!!.providerData) {
             when (profile.providerId) {
                 "google.com" -> {
@@ -128,13 +109,9 @@ class MainActivity : AppCompatActivity(),
             navController.navigate(R.id.action_nav_to_AddJournalFragment)
         }
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        val toggle = ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
+
+
         val headerLayout = navigationView.getHeaderView(0)
         photo = headerLayout.findViewById(R.id.profile_image)
         val loginM = headerLayout.findViewById<TextView>(R.id.login_method)
@@ -145,13 +122,11 @@ class MainActivity : AppCompatActivity(),
             .load(photoUrl)
             .into(photo)
 
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_profile, R.id.nav_help, R.id.nav_logout
-            ), drawer
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navigationView.setupWithNavController(navController)
+        appBarConfiguration = AppBarConfiguration.Builder()
+            .setDrawerLayout(drawer)
+            .build()
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
+        NavigationUI.setupWithNavController(toolbar!!, navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.homeFragment) {
                 fab.visibility = View.VISIBLE
@@ -167,6 +142,16 @@ class MainActivity : AppCompatActivity(),
                 fab.visibility = View.GONE
             }
         }
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_logout -> {
+
+                }
+            }
+            drawer.closeDrawer(GravityCompat.START)
+            return@setNavigationItemSelectedListener true
+        }
+
     }
 
     override fun onBackPressed() {
@@ -177,21 +162,5 @@ class MainActivity : AppCompatActivity(),
             super.onBackPressed()
         }
     }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        val id = item.itemId
-        if (id == R.id.nav_logout) {
-           /* AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener {
-                    navController.navigate(R.id.action_nav_to_loginFragment)
-                }*/
-        }
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
-        return true
-    }
-
 
 }

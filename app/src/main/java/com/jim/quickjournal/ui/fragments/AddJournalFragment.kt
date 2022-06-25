@@ -16,8 +16,10 @@
 package com.jim.quickjournal.ui.fragments
 
 import android.os.Bundle
-import android.view.*
-import androidx.fragment.app.Fragment
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
@@ -35,23 +37,13 @@ import java.util.*
  *
  */
 @AndroidEntryPoint
-class AddJournalFragment : Fragment(), View.OnClickListener {
+class AddJournalFragment :
+    BaseFragment<ActivityAddJournalBinding, JournalViewModel>(ActivityAddJournalBinding::inflate),
+    View.OnClickListener {
     // Fields for views
-    private val viewModel: JournalViewModel by viewModels()
+    override val viewModel by viewModels<JournalViewModel>()
 
     private var mJournalId = DEFAULT_JOURNAL_ID
-    private var _binding: ActivityAddJournalBinding? = null
-    private val binding get() = _binding!!
-    internal var view: View? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = ActivityAddJournalBinding.inflate(inflater, container, false)
-        view = binding.root
-        return view
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +57,6 @@ class AddJournalFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        this.view = view
         initViews()
         if (savedInstanceState != null && savedInstanceState.containsKey(INSTANCE_JOURNAL_ID)) {
             mJournalId = savedInstanceState.getInt(INSTANCE_JOURNAL_ID, DEFAULT_JOURNAL_ID)

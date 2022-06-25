@@ -11,10 +11,9 @@ import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
-import javax.inject.Inject
 
 
-abstract class BaseViewModel @Inject constructor(private val journalRepo: JournalRepositoryImpl) :
+abstract class BaseViewModel(private val journalRepo: JournalRepositoryImpl) :
     ViewModel() {
     suspend fun loadAllJournals(): Flow<List<JournalEntry>>? = journalRepo.loadAllJournals()
 
