@@ -15,10 +15,10 @@
  */
 package com.jim.quickjournal.viewmodel
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jim.quickjournal.db.JournalRepositoryImpl
 import com.jim.quickjournal.db.entity.JournalEntry
+import com.jim.quickjournal.ui.fragments.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -26,18 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JournalViewModel @Inject constructor(private val journalRepo: JournalRepositoryImpl) :
-    ViewModel() {
-
-//    private val _journalList = MutableLiveData<List<JournalEntry>>()
-//    val journalList: LiveData<List<JournalEntry>>
-//        get() = _journalList
-
-//    private val _journalItem = MutableLiveData<JournalEntry>()
-//    val journalItem: LiveData<JournalEntry>
-//        get() = _journalItem
-
-    suspend fun loadAllJournals(): Flow<List<JournalEntry>>? = journalRepo.loadAllJournals()
-
+    BaseViewModel(journalRepo) {
     fun insertJournal(journalEntry: JournalEntry) =
         viewModelScope.launch {
             journalRepo.insertJournal(journalEntry)
@@ -56,5 +45,4 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
         }
 
     suspend fun loadJournalById(id: Int): Flow<JournalEntry>? = journalRepo.loadAllJournalWithID(id)
-
 }

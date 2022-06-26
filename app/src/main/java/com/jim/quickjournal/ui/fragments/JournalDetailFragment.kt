@@ -17,9 +17,10 @@ package com.jim.quickjournal.ui.fragments
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
@@ -34,15 +35,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class JournalDetailFragment : Fragment() {
+class JournalDetailFragment :
+    BaseFragment<ActivityJournalDetailBinding, JournalViewModel>(ActivityJournalDetailBinding::inflate) {
     // Date formatter
-    private val viewModel: JournalViewModel by viewModels()
+    override val viewModel by viewModels<JournalViewModel>()
 
     private val dateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
-
-    private var _binding: ActivityJournalDetailBinding? = null
-    private val binding get() = _binding!!
-    internal var view: View? = null
 
     lateinit var mJournalEntry: JournalEntry
     var mJournalId: Int = DEFAULT_JOURNAL_ID
@@ -56,19 +54,8 @@ class JournalDetailFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = ActivityJournalDetailBinding.inflate(inflater, container, false)
-        view = binding.root
-        return view
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        this.view = view
+    override fun setupUI() {
+        super.setupUI()
         initViews()
         if (mJournalId != DEFAULT_JOURNAL_ID) {
             lifecycle.coroutineScope.launch {
@@ -132,7 +119,7 @@ class JournalDetailFragment : Fragment() {
         val args = Bundle().apply {
             putInt(EXTRA_JOURNAL_ID, mJournalEntry.id)
         }
-        this.findNavController().navigate(R.id.action_nav_to_AddJournalFragment, args)
+        viewModel.actionNavigateToDirection(R.id.action_nav_to_AddJournalFragment, args)
     }
 
     /**
