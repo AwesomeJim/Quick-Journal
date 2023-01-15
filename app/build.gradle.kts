@@ -7,10 +7,10 @@ plugins {
 //  id 'com.google.gms.google-services'
 }
 android {
-    compileSdkVersion(AndroidSdk.compileSdkVersion) //rootProject.compileSdkVersion
+    compileSdkVersion(AndroidSdk.compileSdkVersion)
     defaultConfig {
-        minSdkVersion(AndroidSdk.minSdkVersion) //rootProject.minSdkVersion
-        targetSdkVersion(AndroidSdk.targetSdkVersion) // rootProject.targetSdkVersion
+        minSdkVersion(AndroidSdk.minSdkVersion)
+        targetSdkVersion(AndroidSdk.targetSdkVersion)
         applicationId = "com.jim.quickjournal"
         versionCode = 1
         versionName = "1.0"
@@ -48,7 +48,7 @@ android {
 }
 
 dependencies {
-    //implementation fileTree (dir: 'libs', include: ['*.jar'])
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Core with Ktx
     implementation(Libraries.ktxCore)
 

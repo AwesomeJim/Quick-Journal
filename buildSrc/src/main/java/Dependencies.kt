@@ -5,6 +5,7 @@ object BuildPlugins {
     object Versions {
         const val buildToolsVersion = "7.4.0"
         const val hilt = "2.44.2"
+        const val googleGms = "4.3.14"
 
     }
 
@@ -25,6 +26,7 @@ object BuildPlugins {
     const val kotlinParcelize = "kotlin-parcelize"
     const val daggerHilt = "dagger.hilt.android.plugin"
     const val kotlinAndroidExtensions = "kotlin-android-extensions"
+    const val googleGms = "com.google.gms:google-services:${Versions.googleGms}"
 }
 
 object AndroidSdk {
@@ -38,7 +40,7 @@ object Libraries {
     private object Versions {
         object AndroidX {
             const val core = "1.9.0"
-            const val appcompat = "1.5.1"
+            const val appcompat = "1.6.0"
             const val media = "1.6.0"
             const val legacySupportV4 = "1.0.0"
             const val constraintlayout = "2.1.4"
@@ -48,13 +50,14 @@ object Libraries {
             const val navigationFragmentKtx = "2.5.3"
             const val lifecycle = "2.5.1"
             const val roomDb = "2.4.3"
-            const val lifecycleExtensions = "2.3.0"
+            const val lifecycleExtensions = "2.2.0"
         }
 
         object Google {
             const val material = "1.7.0"
             const val gson = "2.9.0"
             const val firebaseCore = "21.1.1"
+            const val gms = ""
         }
 
         const val picasso = "2.71828"
