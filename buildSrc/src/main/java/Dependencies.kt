@@ -7,11 +7,23 @@ object BuildPlugins {
         const val hilt = "2.44.2"
 
     }
+
+    /*
+    id 'com.android.application'
+    id 'kotlin-android'
+    id "kotlin-parcelize"
+    id "kotlin-kapt"
+    id 'dagger.hilt.android.plugin'
+     */
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.buildToolsVersion}"
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    const val hiltAndroidGradlePlugin = "com.android.tools.build:gradle:${Versions.hilt}"
+    const val hiltAndroidGradlePlugin =
+        "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}"
     const val androidApplication = "com.android.application"
     const val kotlinAndroid = "kotlin-android"
+    const val kotlinKapt = "kotlin-kapt"
+    const val kotlinParcelize = "kotlin-parcelize"
+    const val daggerHilt = "dagger.hilt.android.plugin"
     const val kotlinAndroidExtensions = "kotlin-android-extensions"
 }
 
@@ -54,17 +66,54 @@ object Libraries {
         const val recyclerview = "1.2.1"
         const val room_db = "2.3.0"
         const val material = "1.5.0"
-        const val biometric = "1.1.0"
+        const val timber = "5.0.1"
         const val httplogging = "5.0.0-alpha.6"
-
-
     }
 
+    const val ktxCore = "androidx.core:core-ktx:${Versions.AndroidX.core}"
     const val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     const val AndroidXAppCompat = "androidx.appcompat:appcompat:${Versions.AndroidX.appcompat}"
+    const val AndroidXMedia = "androidx.media:media:${Versions.AndroidX.media}"
+    const val AndroidXlegacySupportV4 =
+        "androidx.legacy:legacy-support-v4:${Versions.AndroidX.legacySupportV4}"
+
     const val AndroidXconstraintLayout =
         "androidx.constraintlayout:constraintlayout:${Versions.AndroidX.constraintlayout}"
-    const val ktxCore = "androidx.core:core-ktx:${Versions.AndroidX.core}"
+    const val googleMaterial =
+        "com.google.android.material:material:${Versions.Google.material}"
+
+    const val AndroidXvectorDrawable =
+        "androidx.vectordrawable:vectordrawable-animated:${Versions.AndroidX.vectorDrawable}"
+    const val AndroidXbrowser = "androidx.browser:browser:${Versions.AndroidX.browser}"
+
+    const val AndroidXmutidex = "androidx.multidex:multidex:${Versions.AndroidX.multidex}"
+    const val AndroidXnavigationFragmentKtx =
+        "androidx.navigation:navigation-fragment-ktx:${Versions.AndroidX.navigationFragmentKtx}"
+    const val AndroidXnavigationUiKtx =
+        "androidx.navigation:navigation-ui-ktx:${Versions.AndroidX.navigationFragmentKtx}"
+    const val AndroidXlifecyclelivedataKtx =
+        "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.AndroidX.lifecycle}"
+
+    const val AndroidXRoomDb = "androidx.room:room-runtime:${Versions.AndroidX.roomDb}"
+
+    const val AndroidXRoomDbCompiler = "androidx.room:room-compiler:${Versions.AndroidX.roomDb}"
+    const val AndroidXRoomDbKtx = "androidx.room:room-ktx:${Versions.AndroidX.roomDb}"
+    const val AndroidXlifecycleRuntimeKtx =
+        "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.AndroidX.lifecycle}"
+
+    const val AndroidXlifecycleExtensions =
+        "androidx.lifecycle:lifecycle-extensions:${Versions.AndroidX.lifecycleExtensions}"
+    const val AndroidXlifecycleCompiler =
+        "androidx.lifecycle:lifecycle-compiler:${Versions.AndroidX.lifecycle}"
+    const val daggerHilt = "com.google.dagger:hilt-android:${BuildPlugins.Versions.hilt}"
+    const val daggerHiltCompiler = "com.google.dagger:hilt-compiler:${BuildPlugins.Versions.hilt}"
+
+    const val firebaseCore = "com.google.firebase:firebase-core:${Versions.Google.firebaseCore}"
+    const val circleimageview = "de.hdodenhof:circleimageview:${Versions.circleimageview}"
+    const val picasso = "com.squareup.picasso:picasso:${Versions.picasso}"
+    const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
+
+
 }
 
 object TestLibraries {
