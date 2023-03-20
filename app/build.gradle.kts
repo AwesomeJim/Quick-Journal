@@ -7,10 +7,10 @@ plugins {
 //  id 'com.google.gms.google-services'
 }
 android {
-    compileSdkVersion(AndroidSdk.compileSdkVersion)
+    compileSdk = AndroidSdk.compileSdkVersion
     defaultConfig {
-        minSdkVersion(AndroidSdk.minSdkVersion)
-        targetSdkVersion(AndroidSdk.targetSdkVersion)
+        minSdk = AndroidSdk.minSdkVersion
+        targetSdk = AndroidSdk.targetSdkVersion
         applicationId = "com.jim.quickjournal"
         versionCode = 1
         versionName = "1.0"
