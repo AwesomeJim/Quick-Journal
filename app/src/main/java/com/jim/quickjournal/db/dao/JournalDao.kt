@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface JournalDao {
     @Query("SELECT * FROM journals ORDER BY updated_on DESC")
-    fun loadAllJournals(): Flow<List<JournalEntry>>?
+    fun loadAllJournals(): Flow<List<JournalEntry>?>
 
     @Insert
     suspend fun insertJournal(journalEntry: JournalEntry)
@@ -37,5 +37,5 @@ interface JournalDao {
     suspend fun deleteJournal(journalEntry: JournalEntry)
 
     @Query("SELECT * FROM journals WHERE id = :id")
-    fun loadJournalById(id: Int): Flow<JournalEntry>?
+    fun loadJournalById(id: Int): Flow<JournalEntry?>
 }

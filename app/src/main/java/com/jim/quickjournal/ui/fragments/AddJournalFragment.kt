@@ -21,16 +21,18 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.jim.quickjournal.R
 import com.jim.quickjournal.databinding.ActivityAddJournalBinding
 import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Date
 
 /**
  * Allows user to make a new Journal Entry
@@ -66,10 +68,11 @@ class AddJournalFragment :
             /**
              * Load the Journal entry form the ViewModel
              */
-            lifecycle.coroutineScope.launch {
-                viewModel.loadJournalById(mJournalId)?.collect {
-                    populateUI(it)
-
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.loadJournalById(mJournalId).filterNotNull().collect {
+                        populateUI(it)
+                    }
                 }
             }
         }

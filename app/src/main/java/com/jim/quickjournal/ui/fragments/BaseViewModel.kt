@@ -15,7 +15,7 @@ import timber.log.Timber
 
 abstract class BaseViewModel(private val journalRepo: JournalRepositoryImpl) :
     ViewModel() {
-    suspend fun loadAllJournals(): Flow<List<JournalEntry>>? = journalRepo.loadAllJournals()
+    suspend fun loadAllJournals(): Flow<List<JournalEntry>?> = journalRepo.loadAllJournals()
 
 
     private fun getNavOptions(

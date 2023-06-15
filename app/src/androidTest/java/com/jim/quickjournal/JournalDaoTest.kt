@@ -10,7 +10,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -48,7 +48,7 @@ class JournalDaoTest {
 
 
     @Test
-    fun insertUser() = runBlockingTest {
+    fun insertUser() = runBlocking {
         val journal = JournalEntry(
             id = 1,
             title = "Testing",
@@ -57,7 +57,7 @@ class JournalDaoTest {
         )
         jounalDao.insertJournal(journal)
         // When the repository emits a value
-        val actual = jounalDao.loadAllJournals()?.first() // Returns the first item in the flow
+        val actual = jounalDao.loadAllJournals().first() // Returns the first item in the flow
 
         assertThat(journal).isIn(actual)
 

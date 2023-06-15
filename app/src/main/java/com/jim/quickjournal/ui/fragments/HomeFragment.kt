@@ -2,7 +2,9 @@ package com.jim.quickjournal.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jim.quickjournal.R
 import com.jim.quickjournal.adaptor.JournalAdapter
@@ -10,7 +12,7 @@ import com.jim.quickjournal.databinding.FragmentHomeBinding
 import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,13 +38,14 @@ class HomeFragment :
 
     override fun setupVM() {
         super.setupVM()
-        lifecycle.coroutineScope.launch {
-            viewModel.loadAllJournals()?.collect {
-                mAdapter.setJournalsList(
-                    context = requireContext(),
-                    it
-                )
-                mAdapter.notifyDataSetChanged()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loadAllJournals().filterNotNull().collect {
+                    mAdapter.setJournalsList(
+                        context = requireContext(), it
+                    )
+                    mAdapter.notifyDataSetChanged()
+                }
             }
         }
         mAdapter.setOnItemClickListener { _, any2, _ ->

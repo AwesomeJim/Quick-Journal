@@ -44,5 +44,5 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
 
         }
 
-    suspend fun loadJournalById(id: Int): Flow<JournalEntry>? = journalRepo.loadAllJournalWithID(id)
+    suspend fun loadJournalById(id: Int): Flow<JournalEntry?> = journalRepo.loadAllJournalWithID(id)
 }

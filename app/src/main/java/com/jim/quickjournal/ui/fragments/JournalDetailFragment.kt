@@ -22,17 +22,19 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.jim.quickjournal.R
 import com.jim.quickjournal.databinding.ActivityJournalDetailBinding
 import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 @AndroidEntryPoint
 class JournalDetailFragment :
@@ -58,14 +60,13 @@ class JournalDetailFragment :
         super.setupUI()
         initViews()
         if (mJournalId != DEFAULT_JOURNAL_ID) {
-            lifecycle.coroutineScope.launch {
-                val journalEntry = viewModel.loadJournalById(mJournalId)?.first()
-                journalEntry?.let { jj ->
-                    populateUI(jj)
-                    mJournalEntry = jj
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.loadJournalById(mJournalId).filterNotNull().collect { journalEntry ->
+                        populateUI(journalEntry)
+                        mJournalEntry = journalEntry
+                    }
                 }
-
-
             }
         }
     }
