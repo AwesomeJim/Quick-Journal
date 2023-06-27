@@ -56,9 +56,8 @@ class AddJournalFragment :
         setHasOptionsMenu(true)
     }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun setupUI(view: View, savedInstanceState: Bundle?) {
+        super.setupUI(view, savedInstanceState)
         initViews()
         if (savedInstanceState != null && savedInstanceState.containsKey(INSTANCE_JOURNAL_ID)) {
             mJournalId = savedInstanceState.getInt(INSTANCE_JOURNAL_ID, DEFAULT_JOURNAL_ID)

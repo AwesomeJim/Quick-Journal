@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -56,8 +57,8 @@ class JournalDetailFragment :
         setHasOptionsMenu(true)
     }
 
-    override fun setupUI() {
-        super.setupUI()
+    override fun setupUI(view: View, savedInstanceState: Bundle?) {
+        super.setupUI(view, savedInstanceState)
         initViews()
         if (mJournalId != DEFAULT_JOURNAL_ID) {
             viewLifecycleOwner.lifecycleScope.launch {

@@ -35,7 +35,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupUI()
+        setupUI(view, savedInstanceState)
         setupVM()
     }
 
@@ -47,7 +47,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel>(
     /**
      * Handle UI
      */
-    protected open fun setupUI() = Unit
+    protected open fun setupUI(view: View, savedInstanceState: Bundle?) = Unit
 
     /**
      * Handle view model observers

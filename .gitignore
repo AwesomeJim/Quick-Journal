@@ -75,7 +75,4 @@ fastlane/readme.md
 Quick-Journal.iml
 app/google-services.json
 app/src/main/res/mipmap-anydpi-v26/
-gradle/
-gradlew
-gradlew.bat
 /.idea/

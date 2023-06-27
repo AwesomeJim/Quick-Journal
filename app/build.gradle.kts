@@ -1,16 +1,18 @@
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id(BuildPlugins.androidApplication)
-    id(BuildPlugins.kotlinAndroid)
-    id(BuildPlugins.kotlinParcelize)
-    id(BuildPlugins.kotlinKapt)
-    id(BuildPlugins.daggerHilt)
-//  id 'com.google.gms.google-services'
+    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.org.jetbrains.kotlin.android)
+    id(libs.plugins.com.google.devtools.ksp.get().pluginId)
+    alias(libs.plugins.com.google.dagger.hilt)
+    alias(libs.plugins.org.jetbrains.kotlin.kapt)
+    id(libs.plugins.kotlin.parcelize.get().pluginId)
 }
+
 android {
-    compileSdk = AndroidSdk.compileSdkVersion
+    compileSdk = libs.versions.compileSdkVersion.get().toInt()
     defaultConfig {
-        minSdk = AndroidSdk.minSdkVersion
-        targetSdk = AndroidSdk.targetSdkVersion
+        minSdk = libs.versions.minSdkVersion.get().toInt()
+        targetSdk = libs.versions.targetSdkVersion.get().toInt()
         applicationId = "com.jim.quickjournal"
         versionCode = 1
         versionName = "1.0"
@@ -19,7 +21,7 @@ android {
         testInstrumentationRunner = "com.jim.quickjournal.HiltTestRunner"
     }
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
@@ -50,70 +52,70 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     // Core with Ktx
-    implementation(Libraries.ktxCore)
+    implementation(libs.ktxCore)
 
-    implementation(Libraries.AndroidXAppCompat)
-    implementation(Libraries.AndroidXMedia)
-    implementation(Libraries.AndroidXlegacySupportV4)
-    implementation(Libraries.AndroidXconstraintLayout)
-    implementation(Libraries.googleMaterial)
-    implementation(Libraries.AndroidXvectorDrawable)
-    implementation(Libraries.AndroidXbrowser)
+    implementation(libs.androidx.appCompat)
+    implementation(libs.androidx.mutidex)
+    implementation(libs.androidx.legacySupportV4)
+    implementation(libs.androidx.constraintLayout)
+    implementation(libs.googleMaterial)
+    implementation(libs.androidx.vectorDrawable)
+    implementation(libs.androidx.browser)
 
-    implementation(Libraries.AndroidXmutidex)
+    implementation(libs.androidx.mutidex)
     //navigation
-    implementation(Libraries.AndroidXnavigationFragmentKtx)
-    implementation(Libraries.AndroidXnavigationUiKtx)
+    implementation(libs.androidx.navigationFragmentKtx)
+    implementation(libs.androidx.navigationUiKtx)
 
-    implementation(Libraries.AndroidXlifecyclelivedataKtx)
-    implementation(Libraries.AndroidXlifecyclelivedataKtx)
+    implementation(libs.androidx.lifecyclelivedataKtx)
+    implementation(libs.androidx.lifecyclelivedataKtx)
 
     // --------Hilt Dependency Injection------------------------------
-    implementation(Libraries.daggerHilt)
-    kapt(Libraries.daggerHiltCompiler)
+    implementation(libs.daggerHilt)
+    kapt(libs.daggerHiltCompiler)
 
-    implementation(Libraries.timber)
+    implementation(libs.timber)
 
 
     //Room Local Database implementation------------------------------------------------------------
-    implementation(Libraries.AndroidXRoomDb)
-    annotationProcessor(Libraries.AndroidXRoomDbCompiler)
+    implementation(libs.androidx.roomDb)
+    annotationProcessor(libs.androidx.roomDbCompiler)
 
-    // To use Kotlin annotation processing tool (kapt)
-    kapt(Libraries.AndroidXRoomDbCompiler)
+    // To use Kotlin annotation processing tool (KSP)
+    ksp(libs.androidx.roomDbCompiler)
 
 
     // optional - Kotlin Extensions and Coroutines support for Room
-    implementation(Libraries.AndroidXRoomDbKtx)
+    implementation(libs.androidx.roomDbKtx)
 
 
     //LifeCycle
-    implementation(Libraries.AndroidXlifecycleRuntimeKtx)
-    implementation(Libraries.AndroidXlifecycleExtensions)
-    annotationProcessor(Libraries.AndroidXlifecycleCompiler)
+    implementation(libs.androidx.lifecycleRuntimeKtx)
+    implementation(libs.androidx.lifecycleExtensions)
+    annotationProcessor(libs.androidx.lifecycleCompiler)
 
 
     //Firebase dependencies-------------------------------------------------------------------------
-    implementation(Libraries.firebaseCore) //firebase core
+    implementation(libs.firebaseCore) //firebase core
 //  implementation 'com.firebaseui:firebase-ui-firestore:8.0.0' //FirebaseUI for Cloud Firestore
 //  implementation 'com.firebaseui:firebase-ui-auth:8.0.0' //FirebaseUI for Firebase Auth
 
-    implementation(Libraries.picasso) //Load photos
-    implementation(Libraries.circleimageview)
+    implementation(libs.picasso) //Load photos
+    implementation(libs.circleimageview)
 
-    testImplementation(TestLibraries.junit4)
-    androidTestImplementation(TestLibraries.junit)
-    androidTestImplementation(TestLibraries.espresso)
+    testImplementation(libs.junit4)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.espresso)
     //    local unit test
-    testImplementation(TestLibraries.truth)
+    testImplementation(libs.truth)
 //    instrumentation test
-    androidTestImplementation(TestLibraries.junit)
-    androidTestImplementation(TestLibraries.espresso)
-    androidTestImplementation(TestLibraries.hiltAndroidTesting)
-    kaptAndroidTest(TestLibraries.hiltAndroidCompiler)
-    androidTestImplementation(TestLibraries.core)
-    androidTestImplementation(TestLibraries.coroutinesTest)
-    androidTestImplementation(TestLibraries.junit)
-    androidTestImplementation(TestLibraries.truth)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.espresso)
+    androidTestImplementation(libs.hiltAndroidTesting)
+    kaptAndroidTest(libs.hiltAndroidCompiler)
+    androidTestImplementation(libs.testingcore)
+    androidTestImplementation(libs.coroutinesTest)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.truth)
 
 }

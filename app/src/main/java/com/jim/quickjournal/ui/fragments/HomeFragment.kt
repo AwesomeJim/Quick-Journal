@@ -1,6 +1,7 @@
 package com.jim.quickjournal.ui.fragments
 
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,8 +27,8 @@ class HomeFragment :
     @Inject
     lateinit var mAdapter: JournalAdapter
 
-    override fun setupUI() {
-        super.setupUI()
+    override fun setupUI(view: View, savedInstanceState: Bundle?) {
+        super.setupUI(view, savedInstanceState)
         // Set the RecyclerView to its corresponding view
         // Set the layout for the RecyclerView to be a linear layout, which measures and
         // positions items within a RecyclerView into a linear list
