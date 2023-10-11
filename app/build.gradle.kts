@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     id(libs.plugins.com.google.devtools.ksp.get().pluginId)
     alias(libs.plugins.com.google.dagger.hilt)
-    alias(libs.plugins.org.jetbrains.kotlin.kapt)
+  //  alias(libs.plugins.org.jetbrains.kotlin.kapt)
     id(libs.plugins.kotlin.parcelize.get().pluginId)
 }
 
@@ -72,7 +72,7 @@ dependencies {
 
     // --------Hilt Dependency Injection------------------------------
     implementation(libs.daggerHilt)
-    kapt(libs.daggerHiltCompiler)
+    ksp(libs.daggerHiltCompiler)
 
     implementation(libs.timber)
 
@@ -112,7 +112,7 @@ dependencies {
     androidTestImplementation(libs.junit)
     androidTestImplementation(libs.espresso)
     androidTestImplementation(libs.hiltAndroidTesting)
-    kaptAndroidTest(libs.hiltAndroidCompiler)
+    kspAndroidTest(libs.hiltAndroidCompiler)
     androidTestImplementation(libs.testingcore)
     androidTestImplementation(libs.coroutinesTest)
     androidTestImplementation(libs.junit)
