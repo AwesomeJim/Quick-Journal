@@ -108,6 +108,8 @@ fun QuickJournalTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
+        typography = AppTypography,
+        shapes = Shapes,
         content = content
     )
 }
