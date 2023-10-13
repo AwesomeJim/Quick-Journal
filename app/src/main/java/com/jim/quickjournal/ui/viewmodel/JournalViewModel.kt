@@ -68,8 +68,20 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
 
         }
 
-    suspend fun loadJournalById(id: Int): Flow<JournalEntry?> = journalRepo.loadAllJournalWithID(id)
+    fun loadJournalById(id: Int): Flow<JournalEntry?> = journalRepo.loadAllJournalWithID(id)
 
+    fun loadJournalByIdState(id: Int): StateFlow<SavedJournalUiState> =
+        journalRepo.loadAllJournalWithID(id).map { journal ->
+            if (journal != null) {
+                SavedJournalUiState(journal)
+            } else {
+                SavedJournalUiState()
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = SavedJournalUiState()
+        )
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L
@@ -81,3 +93,8 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
  * Saved data Ui State for HomeScreen
  */
 data class SavedJournalListUiState(val itemList: List<JournalEntry> = listOf())
+
+/**
+ * Saved data Ui State for HomeScreen
+ */
+data class SavedJournalUiState(val item: JournalEntry? = null)

@@ -14,7 +14,7 @@ class JournalRepositoryImpl @Inject constructor(private val journalDao: JournalD
         return journalDao.loadAllJournals()
     }
 
-    suspend fun loadAllJournalWithID(id: Int): Flow<JournalEntry?> =
+    fun loadAllJournalWithID(id: Int): Flow<JournalEntry?> =
         journalDao.loadJournalById(id).flowOn(Dispatchers.IO)
 
 

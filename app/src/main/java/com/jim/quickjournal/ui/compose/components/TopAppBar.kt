@@ -2,13 +2,11 @@ package com.jim.quickjournal.ui.compose.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.EditNote
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -38,58 +36,28 @@ fun QuickJournalTopAppBar(
     modifier: Modifier = Modifier,
     navigateUp: () -> Unit = {},
     canNavigateBack: Boolean = false,
-    editButtonState: Boolean = false,
-    onEditButtonClicked: () -> Unit = {},
-    cancelButtonState: Boolean = false,
-    onCancelButtonClicked: () -> Unit = {},
-    saveButtonState: Boolean = false,
-    onSaveButtonClicked: () -> Unit = {}
+    actions: @Composable() (RowScope.() -> Unit)
 ) {
     TopAppBar(
         title = {
             Text(
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                color = MaterialTheme.colorScheme.onPrimary,
                 text = title,
                 fontSize = 22.sp,
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
+            containerColor = MaterialTheme.colorScheme.primary
         ),
         modifier = modifier,
-        actions = {
-            if (editButtonState) {
-                IconButton(onClick = onEditButtonClicked) {
-                    Icon(
-                        imageVector = Icons.Filled.EditNote,
-                        contentDescription = "Edit Journal"
-                    )
-                }
-            }
-            if (cancelButtonState) {
-                IconButton(onClick = onCancelButtonClicked) {
-                    Icon(
-                        imageVector = Icons.Filled.Cancel,
-                        contentDescription = "Cancel Editing Journal"
-                    )
-                }
-            }
-            if (saveButtonState) {
-                IconButton(onClick = onSaveButtonClicked) {
-                    Icon(
-                        imageVector = Icons.Filled.Save,
-                        contentDescription = "Save Journal"
-                    )
-                }
-            }
-        },
+        actions = actions,
         navigationIcon = {
             if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        tint = MaterialTheme.colorScheme.onPrimary,
                         contentDescription = stringResource(R.string.back_button)
                     )
                 }
@@ -102,7 +70,9 @@ fun QuickJournalTopAppBar(
 @Composable
 private fun TopAppBarPreview() {
     QuickJournalTheme {
-        QuickJournalTopAppBar("Awesome Jim")
+        QuickJournalTopAppBar("Awesome Jim",
+            actions = {}
+        )
     }
 }
 

@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CardDefaults
@@ -32,6 +33,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -46,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jim.quickjournal.adaptor.JournalAdapter
 import com.jim.quickjournal.db.entity.JournalEntry
+import com.jim.quickjournal.ui.activities.AppBarState
 import com.jim.quickjournal.ui.compose.components.AddFloatingActionButton
 import com.jim.quickjournal.ui.compose.theme.QuickJournalTheme
 import com.jim.quickjournal.ui.viewmodel.JournalViewModel
@@ -61,10 +64,28 @@ import java.util.Locale
 
 @Composable
 fun HomeScreen(
+    onComposing: (AppBarState) -> Unit,
     journalViewModel: JournalViewModel,
     onJournalEntryClicked: (JournalEntry) -> Unit = {},
     onAddJournalClicked: () -> Unit = {}
 ) {
+    LaunchedEffect(key1 = true) {
+        onComposing(
+            AppBarState(
+                title = "Quick Journal",
+                actions = {
+                    IconButton(onClick = onAddJournalClicked) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            contentDescription = null
+                        )
+                    }
+                }
+            )
+        )
+    }
+
     val savedJournalListUiState = journalViewModel
         .savedJournalListUiState
         .collectAsStateWithLifecycle().value
