@@ -2,9 +2,9 @@
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    id(libs.plugins.com.google.devtools.ksp.get().pluginId)
     alias(libs.plugins.com.google.dagger.hilt)
-  //  alias(libs.plugins.org.jetbrains.kotlin.kapt)
+    id(libs.plugins.com.google.devtools.ksp.get().pluginId)
+    alias(libs.plugins.org.jetbrains.kotlin.kapt)
     id(libs.plugins.kotlin.parcelize.get().pluginId)
 }
 
@@ -20,6 +20,8 @@ android {
         //   testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         testInstrumentationRunner = "com.jim.quickjournal.HiltTestRunner"
     }
+
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -30,15 +32,44 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
+        compose = true
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+
+    }
+
+    kotlinOptions {
+        jvmTarget = libs.versions.jvm.target.get()
+        freeCompilerArgs += listOf("-opt-in=kotlin.RequiresOptIn")
+    }
+
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "11"
+            jvmTarget = libs.versions.jvm.target.get()
+            suppressWarnings = true
         }
+    }
+
+    hilt {
+        enableAggregatingTask = true
+        enableExperimentalClasspathAggregation = true
+    }
+
+
+    testOptions {
+        packaging {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
+        unitTests.isReturnDefaultValues = true
     }
 
     lint {
@@ -51,8 +82,18 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    // Core with Ktx
-    implementation(libs.ktxCore)
+    // -------AndroidX and Jetpack Core --------------
+    implementation(libs.bundles.androidx)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+
+    // --------Hilt Dependency Injection--------------
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.android.compiler)
 
     implementation(libs.androidx.appCompat)
     implementation(libs.androidx.mutidex)
@@ -67,32 +108,15 @@ dependencies {
     implementation(libs.androidx.navigationFragmentKtx)
     implementation(libs.androidx.navigationUiKtx)
 
-    implementation(libs.androidx.lifecyclelivedataKtx)
-    implementation(libs.androidx.lifecyclelivedataKtx)
-
-    // --------Hilt Dependency Injection------------------------------
-    implementation(libs.daggerHilt)
-    ksp(libs.daggerHiltCompiler)
-
+    //------------Timber logging----------
     implementation(libs.timber)
 
+    //--------Room Local Database implementation----------
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
-    //Room Local Database implementation------------------------------------------------------------
-    implementation(libs.androidx.roomDb)
-    annotationProcessor(libs.androidx.roomDbCompiler)
-
-    // To use Kotlin annotation processing tool (KSP)
-    ksp(libs.androidx.roomDbCompiler)
-
-
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation(libs.androidx.roomDbKtx)
-
-
-    //LifeCycle
-    implementation(libs.androidx.lifecycleRuntimeKtx)
-    implementation(libs.androidx.lifecycleExtensions)
-    annotationProcessor(libs.androidx.lifecycleCompiler)
+    implementation(libs.kotlinx.coroutines.android)
 
 
     //Firebase dependencies-------------------------------------------------------------------------
@@ -103,19 +127,26 @@ dependencies {
     implementation(libs.picasso) //Load photos
     implementation(libs.circleimageview)
 
-    testImplementation(libs.junit4)
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.espresso)
-    //    local unit test
-    testImplementation(libs.truth)
-//    instrumentation test
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.espresso)
-    androidTestImplementation(libs.hiltAndroidTesting)
-    kspAndroidTest(libs.hiltAndroidCompiler)
-    androidTestImplementation(libs.testingcore)
-    androidTestImplementation(libs.coroutinesTest)
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.truth)
+
+    //-----------local unit test-----------
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.junit4)
+    testImplementation(libs.turbine)
+    testImplementation(libs.mock.android)
+    testImplementation(libs.mock.agent)
+    testImplementation(libs.test.truth)
+    testImplementation(libs.test.coroutines.test)
+    testImplementation(libs.turbine)
+
+    //-----------instrumentation test-----------
+    //androidTestImplementation(libs.espresso)
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.android.compiler)
+    androidTestImplementation(libs.test.testingcore)
+    androidTestImplementation(libs.test.coroutines.test)
+    androidTestImplementation(libs.test.truth)
+    androidTestImplementation(libs.turbine)
+    androidTestImplementation(libs.mock.android)
+    androidTestImplementation(libs.mock.agent)
 
 }
