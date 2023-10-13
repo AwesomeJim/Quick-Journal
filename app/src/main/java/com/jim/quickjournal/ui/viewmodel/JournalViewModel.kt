@@ -21,6 +21,10 @@ import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.ui.views.fragments.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,8 +32,24 @@ import javax.inject.Inject
 class JournalViewModel @Inject constructor(private val journalRepo: JournalRepositoryImpl) :
     BaseViewModel(journalRepo) {
 
-    suspend fun loadAllJournals(): Flow<List<JournalEntry>?> = journalRepo.loadAllJournals()
+    fun loadAllJournals(): Flow<List<JournalEntry>?> = journalRepo.loadAllJournals()
 
+
+    /**
+     * Saved journal list ui state - used by Compose
+     */
+    val savedJournalListUiState: StateFlow<SavedJournalListUiState> =
+        journalRepo.loadAllJournals().map { list ->
+            if (list != null) {
+                SavedJournalListUiState(list)
+            } else {
+                SavedJournalListUiState()
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = SavedJournalListUiState()
+        )
 
     fun insertJournal(journalEntry: JournalEntry) =
         viewModelScope.launch {
@@ -49,4 +69,15 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
         }
 
     suspend fun loadJournalById(id: Int): Flow<JournalEntry?> = journalRepo.loadAllJournalWithID(id)
+
+
+    companion object {
+        const val TIMEOUT_MILLIS = 5_000L
+    }
 }
+
+
+/**
+ * Saved data Ui State for HomeScreen
+ */
+data class SavedJournalListUiState(val itemList: List<JournalEntry> = listOf())
