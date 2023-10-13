@@ -1,4 +1,4 @@
-package com.jim.quickjournal.ui.theme
+package com.jim.quickjournal.ui.compose.theme
 
 import androidx.compose.ui.graphics.Color
 

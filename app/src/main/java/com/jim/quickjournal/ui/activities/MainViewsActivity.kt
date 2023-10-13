@@ -37,7 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainViewsActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration

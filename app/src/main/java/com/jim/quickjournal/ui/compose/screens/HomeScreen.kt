@@ -1,4 +1,4 @@
-package com.jim.quickjournal.ui.screens
+package com.jim.quickjournal.ui.compose.screens
 
 
 /**

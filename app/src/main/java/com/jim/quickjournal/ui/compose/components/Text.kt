@@ -1,4 +1,4 @@
-package com.jim.quickjournal.ui.components
+package com.jim.quickjournal.ui.compose.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme

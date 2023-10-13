@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jim.quickjournal.ui.fragments
+package com.jim.quickjournal.ui.views.fragments
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -30,7 +30,7 @@ import androidx.navigation.fragment.findNavController
 import com.jim.quickjournal.R
 import com.jim.quickjournal.databinding.ActivityJournalDetailBinding
 import com.jim.quickjournal.db.entity.JournalEntry
-import com.jim.quickjournal.viewmodel.JournalViewModel
+import com.jim.quickjournal.ui.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch

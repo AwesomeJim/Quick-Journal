@@ -1,4 +1,4 @@
-package com.jim.quickjournal.ui.fragments
+package com.jim.quickjournal.ui.views.fragments
 
 import android.os.Bundle
 import androidx.lifecycle.LiveData

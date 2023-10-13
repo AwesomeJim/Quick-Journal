@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.jim.quickjournal.ui.fragments.HomeFragment"
+        android:name="com.jim.quickjournal.ui.views.fragments.HomeFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_home">
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/journalDetailFragment"
-        android:name="com.jim.quickjournal.ui.fragments.JournalDetailFragment"
+        android:name="com.jim.quickjournal.ui.views.fragments.JournalDetailFragment"
         android:label="@string/myJournal"
         tools:layout="@layout/activity_journal_detail">
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.jim.quickjournal.ui.fragments.LoginFragment"
+        android:name="com.jim.quickjournal.ui.views.LoginFragment"
         android:label="Login"
         tools:layout="@layout/activity_login" >
         <action
@@ -56,7 +56,7 @@
 
     <fragment
         android:id="@+id/AddJournalFragment"
-        android:name="com.jim.quickjournal.ui.fragments.AddJournalFragment"
+        android:name="com.jim.quickjournal.ui.views.fragments.AddJournalFragment"
         android:label="@string/activity_add_journal_title"
         tools:layout="@layout/activity_add_journal"/>
 </navigation>

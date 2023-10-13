@@ -1,4 +1,4 @@
-package com.jim.quickjournal.ui.theme
+package com.jim.quickjournal.ui.compose.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

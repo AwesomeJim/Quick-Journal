@@ -1,4 +1,4 @@
-package com.jim.quickjournal.ui.fragments
+package com.jim.quickjournal.ui.views.fragments
 
 import android.os.Bundle
 import android.view.View
@@ -11,7 +11,7 @@ import com.jim.quickjournal.R
 import com.jim.quickjournal.adaptor.JournalAdapter
 import com.jim.quickjournal.databinding.FragmentHomeBinding
 import com.jim.quickjournal.db.entity.JournalEntry
-import com.jim.quickjournal.viewmodel.JournalViewModel
+import com.jim.quickjournal.ui.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch

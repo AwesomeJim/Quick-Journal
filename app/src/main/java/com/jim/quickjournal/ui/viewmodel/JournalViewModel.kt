@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jim.quickjournal.viewmodel
+package com.jim.quickjournal.ui.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.jim.quickjournal.db.JournalRepositoryImpl
 import com.jim.quickjournal.db.entity.JournalEntry
-import com.jim.quickjournal.ui.fragments.BaseViewModel
+import com.jim.quickjournal.ui.views.fragments.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

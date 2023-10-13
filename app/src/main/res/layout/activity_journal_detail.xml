@@ -14,8 +14,7 @@
     * See the License for the specific language governing permissions and
     * limitations under the License.
     -->
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -24,12 +23,13 @@
     app:cardCornerRadius="4dp"
     android:layout_margin="2dp"
     tools:stlye="@style/MaterialCardView"
-    tools:context=".ui.fragments.AddJournalFragment">
+    tools:context=".ui.views.fragments.AddJournalFragment">
+
   <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="@color/Layout_background"
-      >
+      android:background="@color/Layout_background">
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/EditText_title_layout"
         android:layout_width="match_parent"

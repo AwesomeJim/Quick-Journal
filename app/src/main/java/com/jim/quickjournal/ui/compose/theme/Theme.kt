@@ -1,4 +1,4 @@
-package com.jim.quickjournal.ui.theme
+package com.jim.quickjournal.ui.compose.theme
 
 import android.app.Activity
 import android.os.Build

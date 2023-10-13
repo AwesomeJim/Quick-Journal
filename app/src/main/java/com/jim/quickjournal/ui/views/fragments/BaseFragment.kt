@@ -1,4 +1,4 @@
-package com.jim.quickjournal.ui.fragments
+package com.jim.quickjournal.ui.views.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.jim.quickjournal.extentions.Inflate
-import com.jim.quickjournal.ui.activities.MainActivity
+import com.jim.quickjournal.ui.activities.MainViewsActivity
 
 abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel>(
     private val inflate: Inflate<VB>
@@ -20,8 +20,8 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel>(
     protected abstract val viewModel: VM
 
     // Activity
-    protected val mainActivity: MainActivity? by lazy {
-        activity as? MainActivity
+    protected val mainActivity: MainViewsActivity? by lazy {
+        activity as? MainViewsActivity
     }
 
     override fun onCreateView(

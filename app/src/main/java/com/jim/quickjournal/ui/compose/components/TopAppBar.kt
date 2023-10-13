@@ -1,4 +1,4 @@
-package com.jim.quickjournal.ui.components
+package com.jim.quickjournal.ui.compose.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jim.quickjournal.R
-import com.jim.quickjournal.ui.theme.QuickJournalTheme
+import com.jim.quickjournal.ui.compose.theme.QuickJournalTheme
 
 /**
  * Created by awesome jim on.
