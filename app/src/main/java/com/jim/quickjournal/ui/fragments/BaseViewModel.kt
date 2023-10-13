@@ -7,17 +7,12 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.jim.quickjournal.R
 import com.jim.quickjournal.db.JournalRepositoryImpl
-import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.utils.SingleLiveEvent
-import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 
 
 abstract class BaseViewModel(private val journalRepo: JournalRepositoryImpl) :
     ViewModel() {
-    suspend fun loadAllJournals(): Flow<List<JournalEntry>?> = journalRepo.loadAllJournals()
-
-
     private fun getNavOptions(
         optionalPopUpToId: Int? = null,
         inclusive: Boolean? = null

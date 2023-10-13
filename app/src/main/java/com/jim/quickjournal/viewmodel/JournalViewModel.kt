@@ -27,6 +27,10 @@ import javax.inject.Inject
 @HiltViewModel
 class JournalViewModel @Inject constructor(private val journalRepo: JournalRepositoryImpl) :
     BaseViewModel(journalRepo) {
+
+    suspend fun loadAllJournals(): Flow<List<JournalEntry>?> = journalRepo.loadAllJournals()
+
+
     fun insertJournal(journalEntry: JournalEntry) =
         viewModelScope.launch {
             journalRepo.insertJournal(journalEntry)
