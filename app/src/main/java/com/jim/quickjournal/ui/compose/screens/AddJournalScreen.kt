@@ -2,6 +2,7 @@ package com.jim.quickjournal.ui.compose.screens
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,18 +22,20 @@ import com.jim.quickjournal.ui.viewmodel.JournalViewModel
 @Composable
 fun AddJournalScreen(
     onComposing: (AppBarState) -> Unit,
-    journalId: Int,
+    journalId: Int?,
     journalViewModel: JournalViewModel,
     onSaveJournalEntryClicked: (JournalEntry) -> Unit = {},
     onCancelJournalClicked: () -> Unit = {}
 ) {
     val savedJournalUiState =
-        journalViewModel.loadJournalByIdState(journalId).collectAsStateWithLifecycle().value
+        journalId?.let {
+            journalViewModel.loadJournalByIdState(it).collectAsStateWithLifecycle().value
+        }
 
     LaunchedEffect(key1 = true) {
         onComposing(
             AppBarState(
-                title = "My Journal",
+                title = "Add Journal",
                 actions = {
                     IconButton(onClick = onCancelJournalClicked) {
                         Icon(
@@ -42,12 +45,12 @@ fun AddJournalScreen(
                         )
                     }
                     IconButton(onClick = {
-                        savedJournalUiState.item?.let {
+                        savedJournalUiState?.item?.let {
                             onSaveJournalEntryClicked(it)
                         }
                     }) {
                         Icon(
-                            imageVector = Icons.Outlined.Cancel,
+                            imageVector = Icons.Outlined.Save,
                             tint = MaterialTheme.colorScheme.onPrimary,
                             contentDescription = "Save Journal"
                         )

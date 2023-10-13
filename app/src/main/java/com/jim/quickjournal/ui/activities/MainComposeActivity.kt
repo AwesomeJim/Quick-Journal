@@ -27,6 +27,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jim.quickjournal.ui.compose.components.QuickJournalTopAppBar
 import com.jim.quickjournal.ui.compose.navigation.AppNavItem
+import com.jim.quickjournal.ui.compose.screens.AddJournalScreen
 import com.jim.quickjournal.ui.compose.screens.HomeScreen
 import com.jim.quickjournal.ui.compose.screens.JournalDetailScreen
 import com.jim.quickjournal.ui.compose.theme.QuickJournalTheme
@@ -68,27 +69,6 @@ class MainComposeActivity : ComponentActivity() {
                         if (!canNavigateBackState.value) canNavigateBackState.value = true
                     }
                 }
-                /*
-
-            if (cancelButtonState) {
-                IconButton(onClick = onCancelButtonClicked) {
-                    Icon(
-                        imageVector = Icons.Filled.Cancel,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        contentDescription = "Cancel Editing Journal"
-                    )
-                }
-            }
-            if (saveButtonState) {
-                IconButton(onClick = onSaveButtonClicked) {
-                    Icon(
-                        imageVector = Icons.Filled.Save,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        contentDescription = "Save Journal"
-                    )
-                }
-            }
-                 */
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
@@ -116,8 +96,22 @@ class MainComposeActivity : ComponentActivity() {
                                         appBarState = it
                                     },
                                     journalViewModel = journalViewModel,
-                                    onJournalEntryClicked = {},
-                                    onAddJournalClicked = {}
+                                    onJournalEntryClicked = {
+                                        val journalIdTypeArg = it.id
+                                        navController.navigate(
+                                            "${
+                                                AppNavItem.ViewJournal.screenRoute
+                                            }/$journalIdTypeArg"
+                                        )
+                                    },
+                                    onAddJournalClicked = {
+                                        val journalIdTypeArg = -1
+                                        navController.navigate(
+                                            "${
+                                                AppNavItem.EditJournal.screenRoute
+                                            }/$journalIdTypeArg"
+                                        )
+                                    }
                                 )
                             }
 
@@ -140,12 +134,18 @@ class MainComposeActivity : ComponentActivity() {
                                 val journalIdTypeArg =
                                     navBackStackEntry.arguments?.getInt(AppNavItem.ViewJournal.journalIdTypeArg)
                                 JournalDetailScreen(onComposing = {
-
+                                    appBarState = it
                                 },
                                     journalId = journalIdTypeArg!!,
                                     journalViewModel = journalViewModel,
                                     onEditJournalEntryClicked = {
-
+                                        navController.navigate(
+                                            "${
+                                                AppNavItem
+                                                    .EditJournal
+                                                    .screenRoute
+                                            }/${it.id}"
+                                        )
                                     },
                                     onDeleteJournalClicked = {
                                         journalViewModel.deleteJournal(it)
@@ -171,6 +171,19 @@ class MainComposeActivity : ComponentActivity() {
                                 // Retrieve the passed argument
                                 val journalIdTypeArg =
                                     navBackStackEntry.arguments?.getInt(AppNavItem.ViewJournal.journalIdTypeArg)
+                                AddJournalScreen(
+                                    onComposing = {
+                                        appBarState = it
+                                    },
+                                    journalId = journalIdTypeArg,
+                                    journalViewModel = journalViewModel,
+                                    onCancelJournalClicked = {
+                                        navController.navigateUp()
+                                    },
+                                    onSaveJournalEntryClicked = {
+                                        navController.navigateUp()
+                                    }
+                                )
 
                             }
                         }
