@@ -24,4 +24,6 @@
   <string name="logout">Logout</string>
   <string name="info">Info</string>
   <string name="initial_letter">Sun</string>
+
+  <string name="back_button">Back</string>
 </resources>
