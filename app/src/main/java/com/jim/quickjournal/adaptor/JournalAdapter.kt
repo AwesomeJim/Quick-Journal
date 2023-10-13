@@ -28,7 +28,8 @@ import com.jim.quickjournal.adaptor.JournalAdapter.JournalViewHolder
 import com.jim.quickjournal.databinding.ItemJournalEntryBinding
 import com.jim.quickjournal.db.entity.JournalEntry
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Random
 import javax.inject.Inject
 
 /**
@@ -103,16 +104,7 @@ class JournalAdapter @Inject constructor() : RecyclerView.Adapter<JournalViewHol
     }
 
 
-    /**
-     *
-     * @return Ca random color which is used a background by
-     * day textview
-     */
-    private val randomColor: Int
-        get() {
-            val rnd = Random()
-            return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
-        }
+
 
     // Inner class for creating ViewHolders
     inner class JournalViewHolder(private val binding: ItemJournalEntryBinding) :
@@ -137,8 +129,20 @@ class JournalAdapter @Inject constructor() : RecyclerView.Adapter<JournalViewHol
 
     companion object {
         // Constant for date format
-        private const val DATE_FORMAT = "d MMM yyyy HH:mm aa"
-        private const val DATE_FORMAT_INIT = "EEE"
+        const val DATE_FORMAT = "d MMM yyyy HH:mm aa"
+        const val DATE_FORMAT_INIT = "EEE"
+
+        /**
+         *
+         * @return Ca random color which is used a background by
+         * day textview
+         */
+
+        val randomColor: Int
+            get() {
+                val rnd = Random()
+                return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
+            }
     }
 
     /**
