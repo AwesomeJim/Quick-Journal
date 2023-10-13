@@ -51,52 +51,25 @@ class MainComposeActivity : ComponentActivity() {
         setContent {
             QuickJournalTheme {
                 navController = rememberNavController()
-                val title = rememberSaveable { (mutableStateOf("")) }
-                val editButtonState = rememberSaveable { (mutableStateOf(false)) }
                 val canNavigateBackState = rememberSaveable { (mutableStateOf(false)) }
-                val cancelButtonState = rememberSaveable { (mutableStateOf(false)) }
-                val saveButtonState = rememberSaveable { (mutableStateOf(false)) }
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 var appBarState by remember { mutableStateOf(AppBarState()) }
 
                 when (navBackStackEntry?.destination?.route) {
                     AppNavItem.Home.screenRoute -> {
-                        title.value = "Quick Journal"
                         if (canNavigateBackState.value) canNavigateBackState.value = false
-                        if (editButtonState.value) editButtonState.value = false
-                        //
-                        if (cancelButtonState.value) cancelButtonState.value = false
-                        if (saveButtonState.value) saveButtonState.value = false
                     }
 
                     AppNavItem.ViewJournal.routeWithArgs -> {
-                        title.value = "My Journal"
-                        if (!editButtonState.value) editButtonState.value = true
                         if (!canNavigateBackState.value) canNavigateBackState.value = true
-                        //
-                        if (cancelButtonState.value) cancelButtonState.value = false
-                        if (saveButtonState.value) saveButtonState.value = false
                     }
 
                     AppNavItem.EditJournal.routeWithArgs -> {
-                        title.value = "Edit/Add Journal"
                         if (!canNavigateBackState.value) canNavigateBackState.value = true
-                        if (editButtonState.value) editButtonState.value = false
-                        //
-                        if (!cancelButtonState.value) cancelButtonState.value = true
-                        if (!saveButtonState.value) saveButtonState.value = true
                     }
                 }
                 /*
-                if (editButtonState) {
-                IconButton(onClick = onEditButtonClicked) {
-                    Icon(
-                        imageVector = Icons.Filled.EditNote,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        contentDescription = "Edit Journal"
-                    )
-                }
-            }
+
             if (cancelButtonState) {
                 IconButton(onClick = onCancelButtonClicked) {
                     Icon(
@@ -120,7 +93,7 @@ class MainComposeActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         QuickJournalTopAppBar(
-                            title = title.value,
+                            title = appBarState.title,
                             modifier = Modifier,
                             navigateUp = { navController.navigateUp() },
                             canNavigateBack = canNavigateBackState.value,
