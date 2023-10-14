@@ -122,11 +122,11 @@ fun HomeScreen(
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.secondaryContainer
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "Start Journaling, and save your best moments and notes",
-                        color = MaterialTheme.colorScheme.secondaryContainer
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.weight(1f))
                 }
@@ -138,12 +138,10 @@ fun HomeScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomEnd
     ) {
-        if (savedJournalListUiState.itemList.isNotEmpty()) {
-            AddFloatingActionButton(
-                extended = lazyListState.isScrollingUp(),
-                onClick = onAddJournalClicked
-            )
-        }
+        AddFloatingActionButton(
+            extended = lazyListState.isScrollingUp(),
+            onClick = onAddJournalClicked
+        )
     }
 }
 
