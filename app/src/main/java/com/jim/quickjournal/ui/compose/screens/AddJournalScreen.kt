@@ -1,17 +1,20 @@
 package com.jim.quickjournal.ui.compose.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Save
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,7 +34,7 @@ import com.jim.quickjournal.ui.activities.AppBarState
  * 13/10/2023
  */
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun AddJournalScreen(
     onComposing: (AppBarState) -> Unit,
@@ -40,10 +43,12 @@ fun AddJournalScreen(
     onSaveJournalEntryClicked: () -> Unit = {},
     onCancelJournalClicked: () -> Unit = {}
 ) {
+    //Load a saved journal if the note id is not empty
+    journalId?.let {
+        journalViewModel.loadJournalByIdState(it)
+    }
     val savedJournalUiState =
-        journalId?.let {
-            journalViewModel.loadJournalByIdState(it).collectAsStateWithLifecycle().value
-        }
+        journalViewModel.savedJournalUiState.collectAsStateWithLifecycle().value
 
     LaunchedEffect(key1 = true) {
         onComposing(
@@ -85,7 +90,7 @@ fun AddJournalScreen(
                 .padding(10.dp)
         ) {
             OutlinedTextField(
-                value = journalViewModel.title,
+                value = savedJournalUiState.title ?: "",
                 onValueChange = journalViewModel::onTitleChanged,
                 Modifier.fillMaxWidth(),
                 placeholder = {
@@ -98,7 +103,7 @@ fun AddJournalScreen(
             )
             Spacer(modifier = Modifier.height(10.dp))
             OutlinedTextField(
-                value = journalViewModel.description,
+                value = savedJournalUiState.description ?: "",
                 onValueChange = journalViewModel::onDescriptionChanged,
                 Modifier
                     .fillMaxWidth()
@@ -111,6 +116,30 @@ fun AddJournalScreen(
                 },
                 colors = outlinedTextFieldColors,
             )
+            Spacer(modifier = Modifier.weight(1f))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Button(
+                    onClick = onCancelJournalClicked,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(150.dp),
+                ) {
+                    Text("Cancel")
+                }
+                Button(
+                    onClick = onSaveJournalEntryClicked,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(150.dp),
+                ) {
+                    Text("Save")
+                }
+            }
         }
     }
 

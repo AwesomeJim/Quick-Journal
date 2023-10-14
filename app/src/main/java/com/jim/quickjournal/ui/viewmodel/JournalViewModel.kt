@@ -18,6 +18,7 @@ package com.jim.quickjournal.ui.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.jim.quickjournal.db.JournalRepositoryImpl
 import com.jim.quickjournal.db.entity.JournalEntry
+import com.jim.quickjournal.ui.compose.screens.SavedJournalUiState
 import com.jim.quickjournal.ui.views.fragments.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -69,6 +70,30 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
 
     fun loadJournalById(id: Int): Flow<JournalEntry?> = journalRepo.loadAllJournalWithID(id)
 
+
+    fun loadJournalByIdStateView(id: Int): StateFlow<SavedJournalUiState> =
+        journalRepo.loadAllJournalWithID(id).map { fetchedJournal ->
+            if (fetchedJournal != null) {
+                SavedJournalUiState(
+                    title = fetchedJournal.title,
+                    description = fetchedJournal.body,
+                    journalEntry = JournalEntry(
+                        id = fetchedJournal.id,
+                        title = fetchedJournal.title,
+                        body = fetchedJournal.body,
+                        updatedOn = fetchedJournal.updatedOn
+                    ),
+                    updatedOn = fetchedJournal.updatedOn,
+                    isEditing = false
+                )
+            } else {
+                SavedJournalUiState()
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = SavedJournalUiState()
+        )
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L

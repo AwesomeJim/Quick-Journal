@@ -7,16 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jim.quickjournal.db.JournalRepositoryImpl
 import com.jim.quickjournal.db.entity.JournalEntry
-import com.jim.quickjournal.ui.viewmodel.JournalViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.Date
 import javax.inject.Inject
 
@@ -38,48 +37,64 @@ class AddJournalViewModel @Inject constructor(
     val savedJournalUiState: StateFlow<SavedJournalUiState> = _uiState.asStateFlow()
 
 
-    var title by mutableStateOf(""); private set
+    private var title by mutableStateOf("")
+
     fun onTitleChanged(title: String) {
         this.title = title
-    }
-
-    var description by mutableStateOf(""); private set
-
-    fun onDescriptionChanged(description: String) {
-        this.description = description
-    }
-
-    fun loadJournalByIdState(id: Int): StateFlow<SavedJournalUiState> =
-        journalRepo.loadAllJournalWithID(id).map { fetchedJournal ->
-            if (fetchedJournal != null) {
-                onTitleChanged(fetchedJournal.title)
-                onDescriptionChanged(fetchedJournal.body)
-                SavedJournalUiState(
-                    title,
-                    description,
-                    updatedOn = fetchedJournal.updatedOn,
-                    isEditing = true
-                )
-            } else {
-                SavedJournalUiState()
-            }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(JournalViewModel.TIMEOUT_MILLIS),
-            initialValue = SavedJournalUiState()
-        )
-
-    fun updateTitle(journalEntry: JournalEntry, isEditing: Boolean) {
         _uiState.update { currentState ->
             currentState.copy(
-
+                title = title
             )
         }
     }
 
-    fun savedJournal() {
-        viewModelScope.launch {
+    private var description by mutableStateOf("")
 
+    fun onDescriptionChanged(description: String) {
+        this.description = description
+        _uiState.update { currentState ->
+            currentState.copy(
+                description = description
+            )
+        }
+    }
+
+    fun loadJournalByIdState(id: Int) {
+        viewModelScope.launch {
+            journalRepo.loadAllJournalWithID(id).catch {
+                Timber.tag("Error").e("while fetching note id %s", id)
+            }.first().also { fetchedJournal ->
+                if (fetchedJournal != null) {
+                    onTitleChanged(fetchedJournal.title)
+                    onDescriptionChanged(fetchedJournal.body)
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            id = fetchedJournal.id,
+                            updatedOn = fetchedJournal.updatedOn,
+                            isEditing = true
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+
+    fun savedJournal() {
+        val date = Date()
+        var journalEntry = JournalEntry(title = title, body = description, updatedOn = date)
+        viewModelScope.launch {
+            if (_uiState.value.isEditing) {
+                journalEntry = JournalEntry(
+                    id = _uiState.value.id!!,
+                    title = title,
+                    body = description,
+                    updatedOn = date
+                )
+                journalRepo.updateJournal(journalEntry)
+            } else {
+                journalRepo.insertJournal(journalEntry)
+            }
         }
 
     }
@@ -89,8 +104,10 @@ class AddJournalViewModel @Inject constructor(
  * Saved data Ui State for HomeScreen
  */
 data class SavedJournalUiState(
+    val id: Int? = null,
     val title: String? = null,
     val description: String? = null,
+    val journalEntry: JournalEntry? = null,
     val updatedOn: Date? = null,
     val isEditing: Boolean = false,
     val canBeSaved: Boolean = false,

@@ -11,7 +11,7 @@ import javax.inject.Inject
 class JournalRepositoryImpl @Inject constructor(private val journalDao: JournalDao) {
 
     fun loadAllJournals(): Flow<List<JournalEntry>?> {
-        return journalDao.loadAllJournals()
+        return journalDao.loadAllJournals().flowOn(Dispatchers.IO)
     }
 
     fun loadAllJournalWithID(id: Int): Flow<JournalEntry?> =

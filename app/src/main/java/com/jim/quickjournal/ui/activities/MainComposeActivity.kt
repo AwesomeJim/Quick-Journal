@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.jim.quickjournal.ui.compose.components.QuickJournalTopAppBar
 import com.jim.quickjournal.ui.compose.navigation.AppNavItem
 import com.jim.quickjournal.ui.compose.screens.AddJournalScreen
+import com.jim.quickjournal.ui.compose.screens.AddJournalViewModel
 import com.jim.quickjournal.ui.compose.screens.HomeScreen
 import com.jim.quickjournal.ui.compose.screens.JournalDetailScreen
 import com.jim.quickjournal.ui.compose.theme.QuickJournalTheme
@@ -133,9 +135,10 @@ class MainComposeActivity : ComponentActivity() {
                                 // Retrieve the passed argument
                                 val journalIdTypeArg =
                                     navBackStackEntry.arguments?.getInt(AppNavItem.ViewJournal.journalIdTypeArg)
-                                JournalDetailScreen(onComposing = {
-                                    appBarState = it
-                                },
+                                JournalDetailScreen(
+                                    onComposing = {
+                                        appBarState = it
+                                    },
                                     journalId = journalIdTypeArg!!,
                                     journalViewModel = journalViewModel,
                                     onEditJournalEntryClicked = {
@@ -169,6 +172,7 @@ class MainComposeActivity : ComponentActivity() {
                                 }
                             ) { navBackStackEntry ->
                                 // Retrieve the passed argument
+                                val addJournalViewModel = hiltViewModel<AddJournalViewModel>()
                                 val journalIdTypeArg =
                                     navBackStackEntry.arguments?.getInt(AppNavItem.ViewJournal.journalIdTypeArg)
                                 AddJournalScreen(
@@ -176,11 +180,12 @@ class MainComposeActivity : ComponentActivity() {
                                         appBarState = it
                                     },
                                     journalId = journalIdTypeArg,
-                                    journalViewModel = journalViewModel,
+                                    journalViewModel = addJournalViewModel,
                                     onCancelJournalClicked = {
                                         navController.navigateUp()
                                     },
                                     onSaveJournalEntryClicked = {
+                                        addJournalViewModel.savedJournal()
                                         navController.navigateUp()
                                     }
                                 )
