@@ -35,7 +35,7 @@ fun JournalDetailScreen(
                 title = "My Journal",
                 actions = {
                     IconButton(onClick = {
-                        savedJournalUiState.item?.let {
+                        savedJournalUiState.journalEntry?.let {
                             onEditJournalEntryClicked(it)
                         }
                     }) {
