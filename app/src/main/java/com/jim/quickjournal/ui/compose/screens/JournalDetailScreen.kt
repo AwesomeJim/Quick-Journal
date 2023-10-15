@@ -36,7 +36,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.ui.activities.AppBarState
 import com.jim.quickjournal.ui.compose.theme.QuickJournalTheme
-import com.jim.quickjournal.ui.viewmodel.JournalViewModel
 import timber.log.Timber
 import java.util.Date
 
@@ -50,7 +49,7 @@ import java.util.Date
 fun JournalDetailScreen(
     onComposing: (AppBarState) -> Unit,
     journalId: Int,
-    journalViewModel: JournalViewModel,
+    journalViewModel: JournalDetailViewModel,
     onEditJournalEntryClicked: () -> Unit = {},
     onDeleteJournalClicked: (JournalEntry) -> Unit = {}
 ) {

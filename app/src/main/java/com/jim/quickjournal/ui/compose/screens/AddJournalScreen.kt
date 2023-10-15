@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Save
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jim.quickjournal.ui.activities.AppBarState
@@ -43,10 +45,14 @@ fun AddJournalScreen(
     onSaveJournalEntryClicked: () -> Unit = {},
     onCancelJournalClicked: () -> Unit = {}
 ) {
-    //Load a saved journal if the note id is not empty
-    journalId?.let {
-        journalViewModel.loadJournalByIdState(it)
+    //Load the Journal Id once
+    LaunchedEffect(key1 = true) {
+        //Load a saved journal if the note id is not empty
+        journalId?.let {
+            journalViewModel.loadJournalByIdState(it)
+        }
     }
+
     val savedJournalUiState =
         journalViewModel.savedJournalUiState.collectAsStateWithLifecycle().value
 
@@ -75,11 +81,22 @@ fun AddJournalScreen(
             )
         )
     }
-    val outlinedTextFieldColors = OutlinedTextFieldDefaults.colors(
-        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-        focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+    JournalDetails(
+        savedJournalUiState,
+        journalViewModel,
+        onSaveJournalEntryClicked = onSaveJournalEntryClicked,
+        onCancelJournalClicked = onCancelJournalClicked
     )
+
+}
+
+@Composable
+fun JournalDetails(
+    savedJournalUiState: SavedJournalUiState,
+    journalViewModel: AddJournalViewModel,
+    onSaveJournalEntryClicked: () -> Unit = {},
+    onCancelJournalClicked: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -89,32 +106,14 @@ fun AddJournalScreen(
                 .fillMaxSize()
                 .padding(10.dp)
         ) {
-            OutlinedTextField(
-                value = savedJournalUiState.title ?: "",
-                onValueChange = journalViewModel::onTitleChanged,
-                Modifier.fillMaxWidth(),
-                placeholder = {
-                    Text(
-                        text = "Title...",
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                    )
-                },
-                colors = outlinedTextFieldColors
+            JournalEntryTitle(
+                title = savedJournalUiState.title ?: "",
+                journalViewModel = journalViewModel,
             )
             Spacer(modifier = Modifier.height(10.dp))
-            OutlinedTextField(
-                value = savedJournalUiState.description ?: "",
-                onValueChange = journalViewModel::onDescriptionChanged,
-                Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = 200.dp),
-                placeholder = {
-                    Text(
-                        text = "Description...",
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                    )
-                },
-                colors = outlinedTextFieldColors,
+            JournalEntryDescription(
+                des = savedJournalUiState.description ?: "",
+                journalViewModel = journalViewModel,
             )
             Spacer(modifier = Modifier.weight(1f))
             Row(
@@ -142,5 +141,64 @@ fun AddJournalScreen(
             }
         }
     }
+}
 
+@Composable
+fun JournalEntryTitle(
+    title: String,
+    journalViewModel: AddJournalViewModel,
+    modifier: Modifier = Modifier,
+) {
+    val outlinedTextFieldColors = OutlinedTextFieldDefaults.colors(
+        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+        focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+    )
+    OutlinedTextField(
+        value = title,
+        onValueChange = {
+            journalViewModel.onTitleChanged(it)
+        },
+        modifier.fillMaxWidth(),
+        placeholder = {
+            Text(
+                text = "Title...",
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+        },
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Done
+        ),
+        colors = outlinedTextFieldColors
+    )
+
+}
+
+@Composable
+fun JournalEntryDescription(
+    des: String,
+    journalViewModel: AddJournalViewModel,
+    modifier: Modifier = Modifier
+) {
+    val outlinedTextFieldColors = OutlinedTextFieldDefaults.colors(
+        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+        focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+        unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+    )
+    OutlinedTextField(
+        value = des,
+        onValueChange = {
+            journalViewModel.onDescriptionChanged(it)
+        },
+        modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 200.dp),
+        placeholder = {
+            Text(
+                text = "Description...",
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+        },
+        colors = outlinedTextFieldColors,
+    )
 }

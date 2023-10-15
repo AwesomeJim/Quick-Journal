@@ -32,6 +32,7 @@ import com.jim.quickjournal.ui.compose.screens.AddJournalScreen
 import com.jim.quickjournal.ui.compose.screens.AddJournalViewModel
 import com.jim.quickjournal.ui.compose.screens.HomeScreen
 import com.jim.quickjournal.ui.compose.screens.JournalDetailScreen
+import com.jim.quickjournal.ui.compose.screens.JournalDetailViewModel
 import com.jim.quickjournal.ui.compose.theme.QuickJournalTheme
 import com.jim.quickjournal.ui.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -133,6 +134,7 @@ class MainComposeActivity : ComponentActivity() {
                                     )
                                 }
                             ) { navBackStackEntry ->
+                                val journalDetailViewModel = hiltViewModel<JournalDetailViewModel>()
                                 // Retrieve the passed argument
                                 val journalIdTypeArg =
                                     navBackStackEntry.arguments?.getInt(AppNavItem.ViewJournal.journalIdTypeArg)!!
@@ -141,7 +143,7 @@ class MainComposeActivity : ComponentActivity() {
                                         appBarState = it
                                     },
                                     journalId = journalIdTypeArg,
-                                    journalViewModel = journalViewModel,
+                                    journalViewModel = journalDetailViewModel,
                                     onEditJournalEntryClicked = {
                                         Timber.e("Edit Journal Clicked $journalIdTypeArg")
                                         navController.navigate(

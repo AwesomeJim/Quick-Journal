@@ -1,8 +1,5 @@
 package com.jim.quickjournal.ui.compose.screens
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jim.quickjournal.db.JournalRepositoryImpl
@@ -37,21 +34,16 @@ class AddJournalViewModel @Inject constructor(
     val savedJournalUiState: StateFlow<SavedJournalUiState> = _uiState.asStateFlow()
 
 
-    private var title by mutableStateOf("")
-
-    fun onTitleChanged(title: String) {
-        this.title = title
+    fun onTitleChanged(newtTitle: String) {
+        Timber.tag("onTitleChanged").e("title %s", newtTitle)
         _uiState.update { currentState ->
             currentState.copy(
-                title = title
+                title = newtTitle
             )
         }
     }
 
-    private var description by mutableStateOf("")
-
     fun onDescriptionChanged(description: String) {
-        this.description = description
         _uiState.update { currentState ->
             currentState.copy(
                 description = description
@@ -60,6 +52,7 @@ class AddJournalViewModel @Inject constructor(
     }
 
     fun loadJournalByIdState(id: Int) {
+        Timber.e("loadJournalByIdState onTitleChanged title: %s", id)
         viewModelScope.launch {
             journalRepo.loadAllJournalWithID(id).catch {
                 Timber.tag("Error").e("while fetching note id %s", id)
@@ -81,6 +74,8 @@ class AddJournalViewModel @Inject constructor(
 
 
     fun savedJournal() {
+        val title = _uiState.value.title ?: ""
+        val description = _uiState.value.description ?: ""
         val date = Date()
         var journalEntry = JournalEntry(title = title, body = description, updatedOn = date)
         viewModelScope.launch {
