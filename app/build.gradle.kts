@@ -97,16 +97,10 @@ dependencies {
 
     implementation(libs.androidx.appCompat)
     implementation(libs.androidx.mutidex)
-    implementation(libs.androidx.legacySupportV4)
-    implementation(libs.androidx.constraintLayout)
-    implementation(libs.googleMaterial)
-    implementation(libs.androidx.vectorDrawable)
-    implementation(libs.androidx.browser)
+
 
     implementation(libs.androidx.mutidex)
-    //navigation
-    implementation(libs.androidx.navigationFragmentKtx)
-    implementation(libs.androidx.navigationUiKtx)
+
 
     //------------Timber logging----------
     implementation(libs.timber)
@@ -124,10 +118,7 @@ dependencies {
 //  implementation 'com.firebaseui:firebase-ui-firestore:8.0.0' //FirebaseUI for Cloud Firestore
 //  implementation 'com.firebaseui:firebase-ui-auth:8.0.0' //FirebaseUI for Firebase Auth
 
-    implementation(libs.picasso) //Load photos
-    implementation(libs.circleimageview)
-
-
+    
     //-----------local unit test-----------
     testImplementation(libs.test.truth)
     testImplementation(libs.test.junit4)

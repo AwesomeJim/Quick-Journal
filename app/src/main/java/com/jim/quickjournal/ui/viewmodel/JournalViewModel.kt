@@ -15,12 +15,11 @@
  */
 package com.jim.quickjournal.ui.viewmodel
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jim.quickjournal.db.JournalRepositoryImpl
 import com.jim.quickjournal.db.entity.JournalEntry
-import com.jim.quickjournal.ui.views.fragments.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -30,10 +29,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JournalViewModel @Inject constructor(private val journalRepo: JournalRepositoryImpl) :
-    BaseViewModel(journalRepo) {
-
-    fun loadAllJournals(): Flow<List<JournalEntry>?> = journalRepo.loadAllJournals()
-
+    ViewModel() {
 
     /**
      * Saved journal list ui state - used by Compose
@@ -51,25 +47,12 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
             initialValue = SavedJournalListUiState()
         )
 
-    fun insertJournal(journalEntry: JournalEntry) =
-        viewModelScope.launch {
-            journalRepo.insertJournal(journalEntry)
-
-        }
-
-    fun updateJournal(journalEntry: JournalEntry) =
-        viewModelScope.launch {
-            journalRepo.updateJournal(journalEntry)
-        }
 
     fun deleteJournal(journalEntry: JournalEntry) =
         viewModelScope.launch {
             journalRepo.deleteJournal(journalEntry)
 
         }
-
-    fun loadJournalById(id: Int): Flow<JournalEntry?> = journalRepo.loadAllJournalWithID(id)
-
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L

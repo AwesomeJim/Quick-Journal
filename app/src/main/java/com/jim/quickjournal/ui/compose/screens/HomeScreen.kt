@@ -46,16 +46,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jim.quickjournal.adaptor.JournalAdapter
 import com.jim.quickjournal.db.entity.JournalEntry
 import com.jim.quickjournal.ui.activities.AppBarState
 import com.jim.quickjournal.ui.compose.components.AddFloatingActionButton
 import com.jim.quickjournal.ui.compose.theme.QuickJournalTheme
 import com.jim.quickjournal.ui.viewmodel.JournalViewModel
 import com.jim.quickjournal.utils.FakeDataSource
+import com.jim.quickjournal.utils.QUtils
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
+
 
 
 /**
@@ -167,8 +168,8 @@ private fun LazyListState.isScrollingUp(): Boolean {
     }.value
 }
 
-val dateFormat = SimpleDateFormat(JournalAdapter.DATE_FORMAT, Locale.getDefault())
-private val dateFormatInit = SimpleDateFormat(JournalAdapter.DATE_FORMAT_INIT, Locale.getDefault())
+val dateFormat = SimpleDateFormat(QUtils.DATE_FORMAT, Locale.getDefault())
+private val dateFormatInit = SimpleDateFormat(QUtils.DATE_FORMAT_INIT, Locale.getDefault())
 
 @Composable
 fun JournalListItem(
@@ -201,7 +202,7 @@ fun JournalListItem(
                 modifier = Modifier
                     .size(60.dp)
                     .aspectRatio(1f)
-                    .background(Color(JournalAdapter.randomColor), shape = CircleShape),
+                    .background(Color(QUtils.randomColor), shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -264,6 +265,7 @@ fun JournalListItem(
         }
     }
 }
+
 
 @Composable
 fun MenuItemButton(
