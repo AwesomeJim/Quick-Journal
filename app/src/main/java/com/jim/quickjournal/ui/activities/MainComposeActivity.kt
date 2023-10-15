@@ -35,6 +35,7 @@ import com.jim.quickjournal.ui.compose.screens.JournalDetailScreen
 import com.jim.quickjournal.ui.compose.theme.QuickJournalTheme
 import com.jim.quickjournal.ui.viewmodel.JournalViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 data class AppBarState(
     val title: String = "",
@@ -134,20 +135,21 @@ class MainComposeActivity : ComponentActivity() {
                             ) { navBackStackEntry ->
                                 // Retrieve the passed argument
                                 val journalIdTypeArg =
-                                    navBackStackEntry.arguments?.getInt(AppNavItem.ViewJournal.journalIdTypeArg)
+                                    navBackStackEntry.arguments?.getInt(AppNavItem.ViewJournal.journalIdTypeArg)!!
                                 JournalDetailScreen(
                                     onComposing = {
                                         appBarState = it
                                     },
-                                    journalId = journalIdTypeArg!!,
+                                    journalId = journalIdTypeArg,
                                     journalViewModel = journalViewModel,
                                     onEditJournalEntryClicked = {
+                                        Timber.e("Edit Journal Clicked $journalIdTypeArg")
                                         navController.navigate(
                                             "${
                                                 AppNavItem
                                                     .EditJournal
                                                     .screenRoute
-                                            }/${it.id}"
+                                            }/${journalIdTypeArg}"
                                         )
                                     },
                                     onDeleteJournalClicked = {

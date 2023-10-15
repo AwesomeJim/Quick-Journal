@@ -53,6 +53,7 @@ import com.jim.quickjournal.ui.compose.components.AddFloatingActionButton
 import com.jim.quickjournal.ui.compose.theme.QuickJournalTheme
 import com.jim.quickjournal.ui.viewmodel.JournalViewModel
 import com.jim.quickjournal.utils.FakeDataSource
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -89,7 +90,7 @@ fun HomeScreen(
     val savedJournalListUiState = journalViewModel
         .savedJournalListUiState
         .collectAsStateWithLifecycle().value
-
+    Timber.e("savedJournalListUiState : " + savedJournalListUiState.itemList.size)
     //
     val lazyListState = rememberLazyListState()
     LazyColumn(
@@ -166,7 +167,7 @@ private fun LazyListState.isScrollingUp(): Boolean {
     }.value
 }
 
-private val dateFormat = SimpleDateFormat(JournalAdapter.DATE_FORMAT, Locale.getDefault())
+val dateFormat = SimpleDateFormat(JournalAdapter.DATE_FORMAT, Locale.getDefault())
 private val dateFormatInit = SimpleDateFormat(JournalAdapter.DATE_FORMAT_INIT, Locale.getDefault())
 
 @Composable

@@ -22,11 +22,17 @@ import com.jim.quickjournal.ui.compose.screens.SavedJournalUiState
 import com.jim.quickjournal.ui.views.fragments.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,6 +40,7 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
     BaseViewModel(journalRepo) {
 
     fun loadAllJournals(): Flow<List<JournalEntry>?> = journalRepo.loadAllJournals()
+
 
     /**
      * Saved journal list ui state - used by Compose
@@ -70,30 +77,34 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
 
     fun loadJournalById(id: Int): Flow<JournalEntry?> = journalRepo.loadAllJournalWithID(id)
 
+    // Search UI state
+    private val _uiState = MutableStateFlow(SavedJournalUiState())
 
-    fun loadJournalByIdStateView(id: Int): StateFlow<SavedJournalUiState> =
-        journalRepo.loadAllJournalWithID(id).map { fetchedJournal ->
-            if (fetchedJournal != null) {
-                SavedJournalUiState(
-                    title = fetchedJournal.title,
-                    description = fetchedJournal.body,
-                    journalEntry = JournalEntry(
-                        id = fetchedJournal.id,
-                        title = fetchedJournal.title,
-                        body = fetchedJournal.body,
-                        updatedOn = fetchedJournal.updatedOn
-                    ),
-                    updatedOn = fetchedJournal.updatedOn,
-                    isEditing = false
-                )
-            } else {
-                SavedJournalUiState()
+    // Backing property to avoid state updates from other classes
+    val savedJournalUiState: StateFlow<SavedJournalUiState> = _uiState.asStateFlow()
+
+
+    fun loadJournalByIdState(id: Int) {
+        viewModelScope.launch {
+            journalRepo.loadAllJournalWithID(id).catch {
+                Timber.tag("Error").e("while fetching note id %s", id)
+            }.first().also { fetchedJournal ->
+                if (fetchedJournal != null) {
+                    _uiState.update { currentState ->
+                        val journalEntry = JournalEntry(
+                            id = fetchedJournal.id,
+                            title = fetchedJournal.title,
+                            body = fetchedJournal.body,
+                            updatedOn = fetchedJournal.updatedOn
+                        )
+                        currentState.copy(
+                            journalEntry = journalEntry
+                        )
+                    }
+                }
             }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = SavedJournalUiState()
-        )
+        }
+    }
 
     companion object {
         const val TIMEOUT_MILLIS = 5_000L
@@ -105,4 +116,5 @@ class JournalViewModel @Inject constructor(private val journalRepo: JournalRepos
  * Saved data Ui State for HomeScreen
  */
 data class SavedJournalListUiState(val itemList: List<JournalEntry> = listOf())
+data class SavedJournalUiState(val journalEntry: JournalEntry? = null)
 
